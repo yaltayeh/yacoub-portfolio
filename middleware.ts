@@ -26,6 +26,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(target);
   }
 
+  // Admin: without a session cookie, go straight to sign-in. Pages and server
+  // actions still validate the session itself (requireAdmin).
+  if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) {
+    if (url.pathname !== "/admin/login" && !isAdminRequest(request)) {
+      const login = url.clone();
+      login.pathname = "/admin/login";
+      login.search = "";
+      login.searchParams.set("next", `${url.pathname}${url.search}`);
+      return NextResponse.redirect(login, 302);
+    }
+    return NextResponse.next();
+  }
+
   // Every public page opened with ?l=CODE is logged here, whether it came from a
   // QR scan (via /l/) or from a link someone copied and shared. Logging runs after
   // the response is sent, so it never slows the page down.
@@ -43,5 +56,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/L/:path*", "/en", "/en/:path*", "/ar", "/ar/:path*"],
+  matcher: ["/", "/L/:path*", "/en", "/en/:path*", "/ar", "/ar/:path*", "/admin", "/admin/:path*"],
 };
