@@ -1,7 +1,10 @@
+// Placeholder until Phase 2 adds the localized home page and the `/` locale redirect.
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-10 text-slate-950">
-      Yacoub Altaieh Portfolio
+    <main style={{ padding: "var(--space-52) var(--space-20)" }}>
+      <h1 style={{ margin: 0, font: "var(--text-hero)", letterSpacing: "var(--tracking-hero)" }}>
+        Yacoub Altaieh
+      </h1>
     </main>
   );
 }

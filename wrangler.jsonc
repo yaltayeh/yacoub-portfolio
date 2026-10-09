@@ -1,6 +1,12 @@
 /**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
+ * Wrangler configuration: https://developers.cloudflare.com/workers/wrangler/configuration/
+ *
+ * Top level = production (the `main` branch).
+ * `env.preview` = every other branch. It keeps the same Worker name so preview
+ * builds become preview *versions* of this Worker (with their own URL) instead
+ * of a second Worker, but it binds the preview database so previews never touch
+ * production data. Bindings are non-inheritable, so each env lists all of them.
+ * The build picks the env from WORKERS_CI_BRANCH (see vite.config.ts).
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
@@ -18,28 +24,47 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
-	/**
-	 * Smart Placement
-	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-	 */
-	// "placement": {  "mode": "smart" }
-	/**
-	 * Bindings
-	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-	 * databases, object storage, AI inference, real-time communication and more.
-	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-	 */
-	/**
-	 * Environment Variables
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-	 * Note: Use secrets to store sensitive data.
-	 * https://developers.cloudflare.com/workers/configuration/secrets/
-	 */
-	// "vars": {  "MY_VARIABLE": "production_value" }
-	/**
-	 * Service Bindings (communicate between multiple Workers)
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-	 */
-	// "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]
+	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "yacoub-portfolio-db",
+			"database_id": "a4d2428f-662c-48f5-8561-f33c778ca747",
+			"migrations_dir": "db/migrations"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "yacoub-portfolio-media"
+		}
+	],
+	"vars": {
+		"APP_ENV": "production"
+	},
+	"env": {
+		"preview": {
+			"name": "yacoub-portfolio",
+			"images": {
+				"binding": "IMAGES"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "yacoub-portfolio-db-preview",
+					"database_id": "3f799c24-b96f-4465-a85d-ca249fc0b53c",
+					"migrations_dir": "db/migrations"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "MEDIA",
+					"bucket_name": "yacoub-portfolio-media"
+				}
+			],
+			"vars": {
+				"APP_ENV": "preview"
+			}
+		}
+	}
 }
