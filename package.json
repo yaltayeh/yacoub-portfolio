@@ -34,7 +34,7 @@
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./worker-configuration.d.ts",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate:local": "wrangler d1 migrations apply DB --local",
-		"db:migrate:preview": "wrangler d1 migrations apply DB --remote --env preview",
+		"db:migrate:preview": "wrangler d1 migrations apply DB --remote --preview",
 		"db:migrate:prod": "wrangler d1 migrations apply DB --remote"
 	}
 }

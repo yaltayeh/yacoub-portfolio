@@ -7,7 +7,7 @@ The GitHub repository is connected to Cloudflare Workers Builds. Every push buil
 | Branch | Build command | Deploy command | Result |
 |---|---|---|---|
 | `main` | `pnpm run build` | `npx wrangler deploy` | Goes live (production) |
-| any other branch | `pnpm run build` | `npx wrangler versions upload` | A preview version with its own URL; production is untouched |
+| any other branch | `pnpm run build` | `npx wrangler preview` | A [Worker Preview](https://developers.cloudflare.com/workers/previews/) with its own URL; production is untouched |
 
 Treat every push to `main` as a release. Work happens on one branch per phase (for example `phase-1-foundation`), is reviewed on that branch's preview URL, and is merged into `main` only after approval.
 
@@ -15,18 +15,18 @@ Find a branch's preview URL on the GitHub commit (the "Workers Builds" check) or
 
 ## Production vs preview
 
-`wrangler.jsonc` describes production at the top level and previews under `env.preview`:
+`wrangler.jsonc` describes production at the top level and previews in its `previews` block. Previews don't inherit production settings, so every binding the code reads is listed again in `previews`.
 
 | | Production | Preview |
 |---|---|---|
-| Worker | `yacoub-portfolio` | `yacoub-portfolio` (same Worker, preview versions) |
+| Worker | `yacoub-portfolio` | `yacoub-portfolio` (one Preview per branch) |
 | D1 | `yacoub-portfolio-db` | `yacoub-portfolio-db-preview` |
 | R2 | `yacoub-portfolio-media` | `yacoub-portfolio-media` (shared) |
 | `APP_ENV` | `production` | `preview` |
 
-The build picks the env itself: Workers Builds sets `WORKERS_CI_BRANCH`, and `vite.config.ts` selects `preview` for any branch other than `main`. To build a preview locally, run `CLOUDFLARE_ENV=preview pnpm build`.
+Previews have their own secrets. When secrets are added in Phase 4, set them for production with `wrangler secret put` and for previews with the Previews secret commands (documented then).
 
-Because previews are versions of the same Worker, they share its secrets. When secrets are added in Phase 4, they are set once with `wrangler secret put`.
+Preview URLs are public by default. They don't hold real data, but they can be protected with Cloudflare Access if needed.
 
 ## Bindings
 
@@ -47,7 +47,7 @@ After changing bindings in `wrangler.jsonc`, run `pnpm cf-typegen` and commit `w
 1. Edit `db/schema.ts`.
 2. Generate the SQL: `pnpm db:generate --name <short_description>`. Commit the new file in `db/migrations/`.
 3. Try it locally: `pnpm db:migrate:local`.
-4. Apply it to the preview database: `pnpm db:migrate:preview`. Push the branch and check the preview.
+4. Apply it to the preview database: `pnpm db:migrate:preview`. This uses the `preview_database_id` on the `DB` binding. Push the branch and check the preview.
 5. **Before merging into `main`**, apply it to production: `pnpm db:migrate:prod`.
 
 Never merge code that needs a migration that hasn't been applied to production. Migrations must stay backwards compatible with the code currently live, because the production migration runs before the new code deploys.
