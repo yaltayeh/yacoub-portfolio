@@ -1,6 +1,45 @@
 # Admin guide
 
-> The admin screens arrive in Phase 4. This page already covers how tracking works, and grows with each phase.
+The admin lives at `/admin` (English only, not indexed by search engines). Use it on your phone right after handing someone a card.
+
+## Signing in
+
+Go to `/admin` and sign in with the email and password of the admin account. Sessions last 30 days. Sign out from the sidebar (desktop) or the tab bar (phone).
+
+Login attempts are limited to 5 per minute; after that, wait a minute.
+
+## Creating or resetting the admin account
+
+Sign-up is turned off, so the account is created from your computer. The same command resets the password if the account already exists (and signs out all sessions):
+
+```sh
+ADMIN_EMAIL=yacoubaltaieh@gmail.com ADMIN_PASSWORD='a long passphrase' node scripts/create-admin.ts --production
+```
+
+- Use `--preview` for the preview database and `--local` for local development. Each database has its own account.
+- The password must be at least 12 characters. It's read from the environment, hashed on your computer (PBKDF2-SHA256), and only the hash is stored.
+- Tip: start the command with a space so it isn't saved in your shell history (zsh: `setopt HIST_IGNORE_SPACE`).
+
+## Naming a card (the 10-second flow)
+
+1. Open `/admin` on your phone.
+2. In **Name a link**, type the number printed on the card (e.g. `17`). The matching link appears under the field.
+3. Tap **Open**. The link opens with the name field focused.
+4. Type the person's name (and optionally where you met), then press **Done** on the keyboard. You're back on the Overview.
+
+## Links
+
+**Links** lists every link, printed and digital: search by number, name, notes or code; filter All / Printed / Digital; sort by last activity or number. Tap a link to open its details:
+
+- Edit the name and notes in place (saved when you leave the field).
+- Copy the link, or download its QR code as SVG or PNG.
+- Visits, shares (by platform), first and last activity, and the full event log, newest first.
+
+Each link has its own address (`/admin/links?link=X7K2P9Q` or `?link=17`), so you can bookmark or refresh it. Close with ×, Esc, a tap outside, or (phone) a swipe down.
+
+## Digital links
+
+**Create → New link** makes a single link for your CV, LinkedIn, GitHub or one company application. Pick what it's for (it suggests a name), adjust the name and notes, then **Create link**. Printed card links come from batches (Phase 5).
 
 ## What gets recorded
 
