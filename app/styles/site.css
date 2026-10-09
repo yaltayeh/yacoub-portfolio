@@ -1254,12 +1254,13 @@ a[aria-disabled="true"] {
 }
 .contact__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-10);
 }
 .btn--contact {
   min-height: 52px;
-  gap: 9px;
+  padding-inline: 8px;
+  gap: 8px;
   background: var(--space);
   border-color: var(--line-strong);
 }
@@ -1971,20 +1972,6 @@ span.tl-zone__note {
   gap: var(--space-10);
   margin-top: 4px;
 }
-.hk-card__toggle {
-  border-color: #f2edff29;
-}
-.hk-card__toggle:hover {
-  background: #f2edff0f;
-}
-.hk-card__chevron {
-  color: var(--accent);
-  transition: transform 0.2s ease;
-}
-.hk-card__toggle[aria-expanded="true"] .hk-card__chevron {
-  transform: rotate(180deg);
-}
-
 /* Placement badge: each level differs in fill and icon, not only colour. */
 .place {
   display: inline-flex;
@@ -2015,20 +2002,12 @@ span.tl-zone__note {
   font-weight: 500;
 }
 
-.hk-card__panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-16);
-  padding: 18px;
-  border-block-start: 1px solid var(--line-soft);
-}
-.hk-card__panel[hidden] {
-  display: none;
-}
 .hk-card__details {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 18px;
+  border-block-start: 1px solid var(--line-soft);
 }
 .hk-detail__label {
   margin: 0 0 4px;
@@ -2058,112 +2037,6 @@ span.tl-zone__note {
   font-size: 16px;
   font-weight: 500;
   color: var(--ink);
-}
-
-/* LinkedIn embed frame */
-.embed {
-  margin: 0;
-  border-radius: var(--radius-control);
-  background: #07031a;
-  border: 1px solid #f2edff1a;
-  overflow: hidden;
-}
-.embed__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-8);
-  padding-inline: 14px 6px;
-  border-block-end: 1px solid var(--line-soft);
-}
-.embed__label {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-muted);
-}
-[lang="ar"] .embed__label {
-  font-family: var(--font-arabic);
-  font-size: 13px;
-}
-.embed__open {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  padding: 0 10px;
-  font-size: 13px;
-  text-decoration: none;
-}
-.embed__body {
-  position: relative;
-  min-height: 380px;
-}
-.embed__frame {
-  display: block;
-  width: 100%;
-  height: 540px;
-  border: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.embed__frame.is-loaded {
-  opacity: 1;
-}
-.embed__skeleton {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
-  padding: var(--space-16);
-}
-.embed__skeleton-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-10);
-}
-.embed__skeleton-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-.embed__loading {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-faint);
-}
-.skel {
-  display: block;
-  height: 10px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #f2edff0d 0%, #f2edff21 50%, #f2edff0d 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-.skel--thin {
-  height: 8px;
-}
-.skel--avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.skel--media {
-  height: 190px;
-  border-radius: var(--radius-code);
-}
-@keyframes shimmer {
-  from {
-    background-position: 200% 0;
-  }
-  to {
-    background-position: -200% 0;
-  }
 }
 
 @media (min-width: 900px) {
@@ -2203,7 +2076,7 @@ span.tl-zone__note {
     gap: var(--space-12);
     margin-top: 0;
   }
-  .hk-card__toggle {
+  .hk-card__link {
     padding: 0 16px;
     font-size: 15px;
   }
@@ -2215,17 +2088,9 @@ span.tl-zone__note {
     padding: 7px 14px;
     box-shadow: 0 0 26px -2px #bfa3ffb3;
   }
-  .hk-card__panel {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 24px 32px;
-    padding: 28px;
-  }
   .hk-card__details {
-    flex: 1 1 340px;
-    min-width: 0;
     gap: 18px;
+    padding: 28px;
   }
   .hk-detail__label {
     margin-bottom: 6px;
@@ -2240,22 +2105,5 @@ span.tl-zone__note {
   }
   .hk-detail--role .hk-detail__text {
     font-size: 18px;
-  }
-  .embed {
-    flex: 1 1 420px;
-    min-width: 0;
-    max-width: 560px;
-  }
-  .embed__bar {
-    padding-inline-start: 16px;
-  }
-  .embed__body {
-    min-height: 460px;
-  }
-  .embed__frame {
-    height: 600px;
-  }
-  .embed__skeleton {
-    padding: 18px;
   }
 }

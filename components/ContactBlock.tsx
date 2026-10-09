@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Dictionary } from "@/i18n";
 import { contactLinks } from "@/content/profile";
-import { AddContact, Briefcase, Chat, Code, Mail } from "./icons";
+import { AddContact, Briefcase, Code, Mail } from "./icons";
 
 type Props = {
   t: Dictionary;
@@ -27,7 +27,6 @@ export function ContactBlock({ t, eyebrow, title }: Props) {
           </a>
           <div className="contact__grid">
             <ContactLink href={contactLinks.email} icon={<Mail />} label={t.contact.email} />
-            <ContactLink href={contactLinks.whatsapp} icon={<Chat />} label={t.contact.whatsapp} external />
             <ContactLink href={contactLinks.linkedin} icon={<Briefcase />} label={t.contact.linkedin} external />
             <ContactLink href={contactLinks.github} icon={<Code />} label={t.contact.github} external />
           </div>

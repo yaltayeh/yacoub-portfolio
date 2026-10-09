@@ -8,7 +8,7 @@ Anything written as `[TODO: ...]` shows on the site as a visible placeholder unt
 
 ## Contact details — `content/profile.ts`
 
-Fill in `email`, `whatsapp` (international format, e.g. `+962 79 123 4567`), `linkedin` (full URL) and `github` (full URL). The contact buttons stay greyed out until each value is set. These details are also used by the "Save contact" card (Phase 6).
+`email`, `linkedin` (full profile URL) and `github` (full URL). They feed the contact block, the short links in the Home hero, and (Phase 6) the "Save contact" card. There is deliberately no phone or WhatsApp. If a value is set back to `"[TODO: ...]"`, its button shows greyed out.
 
 ## The journey — `content/journey.ts`
 
@@ -46,9 +46,7 @@ Add or edit an entry in the `hackathons` list (newest first):
   country: "JO",                      // two-letter country code
   international: false,               // true shows the "International" tag
   placement: "1st Place",             // "1st Place" | "2nd Place" | "Participated"
-  urnType: "activity",                // see below
-  linkedInEmbedId: "7384198569077055488",
-  linkedInUrl: "https://www.linkedin.com/posts/...",
+  linkedInUrl: "https://www.linkedin.com/posts/...", // opened by "View post"
   // Optional, each shows only when present:
   problem: { en: "...", ar: "..." },
   built: { en: "...", ar: "..." },
@@ -58,7 +56,7 @@ Add or edit an entry in the `hackathons` list (newest first):
 }
 ```
 
-**Finding the LinkedIn id and type:** look at the post URL. It ends with `activity-<number>-xxxx` or `share-<number>-xxxx`. The number is `linkedInEmbedId`, and the word before it is `urnType`.
+"View post" opens `linkedInUrl` in a new tab: copy the post's link from LinkedIn ("Copy link to post"). The story fields show inside the card, under the title.
 
 The stats at the top of the page (total, 1st places, countries) are computed from this list.
 

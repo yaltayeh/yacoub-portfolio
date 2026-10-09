@@ -38,7 +38,7 @@ export const journey: Station[] = [
       en: "Implementing hash functions and ciphers from scratch in C.",
       ar: "أبني دوال التجزئة وخوارزميات التشفير من الصفر بلغة C.",
     },
-    tags: ["MD5", "SHA-256", "SHA-512", "RSA"],
+    tags: ["MD5", "SHA-256", "SHA-512", "RSA", "DSA", "PBKDF2"],
     command: './ft_ssl sha256 -s "42 Amman"',
   },
   {
@@ -49,7 +49,7 @@ export const journey: Station[] = [
       en: "ft_ping and ft_traceroute: understanding how data travels.",
       ar: "ft_ping وft_traceroute: فهم كيف تنتقل البيانات عبر الشبكة.",
     },
-    tags: ["ft_ping", "ft_traceroute"],
+    tags: ["ft_ping", "ft_traceroute", "BGP", "nmap"],
   },
   {
     id: "hardware-password-manager",
@@ -59,7 +59,7 @@ export const journey: Station[] = [
       en: "A password manager on ESP32 that encrypts and stores passwords on the device itself.",
       ar: "مدير كلمات مرور على ESP32 يشفّر كلمات السر ويخزّنها داخل الجهاز نفسه.",
     },
-    tags: ["ESP32", "Embedded", "Encryption"],
+    tags: ["ESP32", "Embedded", "Encryption", "PSA Crypto API"],
   },
   {
     id: "post-quantum",

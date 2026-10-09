@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/i18n";
-import { hackathons, hackathonStats, linkedInEmbedUrl, type Hackathon, type Placement } from "@/content/hackathons";
+import { hackathons, hackathonStats, type Hackathon, type Placement } from "@/content/hackathons";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ContactBlock } from "@/components/ContactBlock";
@@ -30,7 +30,6 @@ export default async function HackathonsPage({ params }: Props) {
   const regionNames = new Intl.DisplayNames([locale], { type: "region" });
 
   const toCard = (h: Hackathon): HackathonCardData => ({
-    slug: h.slug,
     title: h.title,
     year: h.year,
     location: h.location[locale],
@@ -38,7 +37,6 @@ export default async function HackathonsPage({ params }: Props) {
     countryName: regionNames.of(h.country) ?? h.country,
     international: h.international,
     placement: placementKey[h.placement],
-    embedUrl: linkedInEmbedUrl(h),
     postUrl: h.linkedInUrl,
     details: [
       { label: t.hackathons.details.problem, text: h.problem?.[locale] },
@@ -57,10 +55,7 @@ export default async function HackathonsPage({ params }: Props) {
     },
     international: t.hackathons.international,
     viewPost: t.hackathons.viewPost,
-    hidePost: t.hackathons.hidePost,
-    post: t.hackathons.post,
-    open: t.hackathons.open,
-    loadingPost: t.hackathons.loadingPost,
+    viewPostLabel: t.hackathons.viewPostLabel,
   };
 
   return (

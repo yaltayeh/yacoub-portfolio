@@ -13,7 +13,7 @@ flowchart LR
   H["/health (temporary)"] --> DB[(D1: DB)]
 ```
 
-The site is a vinext (Next.js App Router API on Vite) app running as one Cloudflare Worker. Public pages are server components rendered from TypeScript content files; the only client JavaScript is the language toggle and the hackathon expanders.
+The site is a vinext (Next.js App Router API on Vite) app running as one Cloudflare Worker. Public pages are server components rendered from TypeScript content files; the only client JavaScript is the language toggle.
 
 ## Routing and i18n
 
@@ -45,15 +45,15 @@ The site is a vinext (Next.js App Router API on Vite) app running as one Cloudfl
 | `content/profile.ts` | Name, contact details, photo paths |
 | `content/journey.ts` | The five journey stations (Home + Roadmap) |
 | `content/roadmap.ts` | Zones, Next items, "last updated", topics being studied |
-| `content/hackathons.ts` | Hackathons, plus computed stats and the LinkedIn embed URL |
+| `content/hackathons.ts` | Hackathons and their computed stats |
 | `content/site.ts` | Feature switches (Projects hidden until Phase 7) |
 | `db/schema.ts` | D1 tables for tracked links and events (used from Phase 3) |
 
 How to edit these is in `docs/content.md`.
 
-## LinkedIn embeds
+## LinkedIn posts
 
-Hackathon posts are never loaded with the page. `components/HackathonCard.tsx` injects the iframe (`https://www.linkedin.com/embed/feed/update/urn:li:{type}:{id}`) only after "View post" is pressed, showing a skeleton until the iframe has loaded.
+Hackathon posts are not embedded. "View post" in `components/HackathonCard.tsx` is a plain link that opens the post on LinkedIn in a new tab, so the page loads nothing from LinkedIn and needs no third-party frames in its CSP.
 
 ## Cloudflare bindings
 

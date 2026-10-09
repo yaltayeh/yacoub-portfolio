@@ -11,9 +11,7 @@ export type Hackathon = {
   country: string;
   international: boolean;
   placement: Placement;
-  /** LinkedIn URN type: most posts are "activity", some are "share". */
-  urnType: "activity" | "share";
-  linkedInEmbedId: string;
+  /** The LinkedIn post that "View post" opens. */
   linkedInUrl: string;
   /** Optional story. Each part renders only when present. */
   problem?: Localized;
@@ -34,8 +32,6 @@ export const hackathons: Hackathon[] = [
     country: "TH",
     international: true,
     placement: "2nd Place",
-    urnType: "activity",
-    linkedInEmbedId: "7394622237187842048",
     linkedInUrl:
       "https://www.linkedin.com/posts/42amman_asiahackathon2025-activity-7394622237187842048-zdF0",
   },
@@ -47,8 +43,6 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    urnType: "activity",
-    linkedInEmbedId: "7384198569077055488",
     linkedInUrl:
       "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2",
   },
@@ -60,8 +54,6 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    urnType: "activity",
-    linkedInEmbedId: "7371465399256772608",
     linkedInUrl:
       "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI",
   },
@@ -73,8 +65,6 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    urnType: "share",
-    linkedInEmbedId: "7335669999644176386",
     linkedInUrl:
       "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j",
   },
@@ -86,8 +76,6 @@ export const hackathons: Hackathon[] = [
     country: "KR",
     international: true,
     placement: "Participated",
-    urnType: "activity",
-    linkedInEmbedId: "7245402011624423428",
     linkedInUrl:
       "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53",
   },
@@ -99,8 +87,6 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    urnType: "activity",
-    linkedInEmbedId: "7217499033664155648",
     linkedInUrl:
       "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT",
   },
@@ -112,8 +98,4 @@ export function hackathonStats(list: Hackathon[] = hackathons) {
     firsts: list.filter((h) => h.placement === "1st Place").length,
     countries: new Set(list.map((h) => h.country)).size,
   };
-}
-
-export function linkedInEmbedUrl(h: Hackathon): string {
-  return `https://www.linkedin.com/embed/feed/update/urn:li:${h.urnType}:${h.linkedInEmbedId}`;
 }
