@@ -36,6 +36,7 @@ Both commands share the same local database in `.wrangler/state`.
 | `pnpm build` | Production build into `dist/` |
 | `pnpm start` | Serve the built Worker locally |
 | `pnpm typecheck` | Run the TypeScript type-check |
+| `node scripts/seed-test-links.ts --local\|--preview` | Create test tracked links (temporary, Phase 3) |
 | `pnpm screenshot <url> <dir> <paths…>` | Full-page screenshots at 390px and 1440px (uses your installed Chrome) |
 | `pnpm cf-typegen` | Regenerate binding types after editing `wrangler.jsonc` |
 | `pnpm db:generate --name <name>` | Generate a migration from `db/schema.ts` |
@@ -48,20 +49,21 @@ Both commands share the same local database in `.wrangler/state`.
 ```
 app/
   [lang]/            public pages: Home, roadmap/, hackathons/ (root layout sets lang/dir)
+  l/[code]/          tracked-link entry point (302 to /{lang}?l=CODE)
   (dev)/             temporary checks: /health and /design-tokens (removed in Phase 6)
   styles/            tokens.css (design tokens), site.css (public site)
   globals.css        base styles
 components/          header, footer, contact block, journey, hackathon card, icons
 content/             profile, journey, roadmap, hackathons (edit these to change the site)
 i18n/                en.ts and ar.ts UI strings
-lib/                 i18n helpers, fonts
+lib/                 i18n, link codes, User-Agent and bot rules, tracking
 db/
   schema.ts          Drizzle schema
   client.ts          per-request Drizzle client
   migrations/        SQL migrations (generated, applied with Wrangler)
-middleware.ts        "/" → /en or /ar
+middleware.ts        "/" → /en or /ar, /L/ → /l/, logging of ?l= visits and shares
 public/images/       portrait
-scripts/             screenshot helper
+scripts/             screenshot helper, temporary test-link seeder
 docs/                project documentation
 wrangler.jsonc       Worker config: production at the top level, `previews` for branch previews
 ```
@@ -74,4 +76,4 @@ wrangler.jsonc       Worker config: production at the top level, `previews` for 
 - [`docs/deployment.md`](docs/deployment.md): deploys, previews, databases and migrations
 - [`docs/decisions.md`](docs/decisions.md): notable decisions and deviations from BUILD.md
 
-`docs/admin.md` is added with the admin in Phase 4.
+- [`docs/admin.md`](docs/admin.md): what visits and shares are, extending the bot list, test links (admin screens from Phase 4)

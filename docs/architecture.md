@@ -1,6 +1,6 @@
 # Architecture
 
-> Grows phase by phase. Covered so far: routing, i18n, styling and data (Phases 1–2).
+> Grows phase by phase. Covered so far: routing, i18n, styling, data and link tracking (Phases 1–3).
 
 ## Overview
 
@@ -10,7 +10,10 @@ flowchart LR
   MW -->|"302 by Accept-Language"| P["/en or /ar pages"]
   V -->|"/en/... /ar/..."| P
   P --> C[content/*.ts + i18n/*.ts]
-  H["/health (temporary)"] --> DB[(D1: DB)]
+  Q[QR / tracked link] -->|"/l/CODE or /L/CODE"| LH["app/l/[code]/route.ts"]
+  LH -->|"302 /{lang}?l=CODE"| P
+  MW -.->|"?l=CODE: log after response"| DB[(D1: DB)]
+  H["/health (temporary)"] --> DB
 ```
 
 The site is a vinext (Next.js App Router API on Vite) app running as one Cloudflare Worker. Public pages are server components rendered from TypeScript content files; the only client JavaScript is the language toggle.
@@ -38,6 +41,18 @@ The site is a vinext (Next.js App Router API on Vite) app running as one Cloudfl
 - `app/styles/site.css`: the public site. Mobile first (390px design); the desktop layout (1440px design) starts at 900px. Only logical properties (`margin-inline`, `inset-inline-start`, ...), so RTL needs almost no special rules; directional icons carry a `flip` class mirrored under `[dir="rtl"]`.
 - Motion is CSS only: nebula drift, twinkling stars, particle pairs, waves, the in-progress pulse, and the journey rail drawing in on scroll (`animation-timeline: view()` inside `@supports`). `prefers-reduced-motion: reduce` stops all of it.
 
+## Link tracking
+
+Every printed card and some digital links carry a unique URL, `https://altaieh.tech/l/CODE`.
+
+1. **`/l/CODE`** (`app/l/[code]/route.ts`): uppercases the code, checks it exists in D1, and answers **302** (never 301, which browsers cache) to `/{lang}?l=CODE`, choosing the language from `Accept-Language`. An unknown code goes to `/{lang}` without `?l=`. The handler never logs.
+2. **`/L/CODE`**: printed QR codes encode the whole URL in uppercase so the QR can use the smaller alphanumeric mode. The middleware rewrites `/L/` to the same handler.
+3. **Logging** (`middleware.ts` → `lib/tracking.ts`): any GET of a public page with `?l=CODE` records one event. This catches QR scans (after the redirect) and opens of links people copied from their address bar and shared, since those still carry `?l=`. The insert runs in `waitUntil(...)` after the response is sent, so it never slows the page. It's a single `INSERT … SELECT … FROM links WHERE code = ?`, so unknown codes insert nothing.
+4. **Classification** (`lib/ua.ts`, `lib/bots.ts`): a link-preview bot's User-Agent (WhatsApp, Telegram, LinkedIn, iMessage, …) makes it a **share** with that platform; anything else is a **visit** with device and OS. Country comes from Cloudflare (`request.cf.country`, else the `CF-IPCountry` header). The raw User-Agent and IP are never stored.
+5. **Not logged:** requests carrying the Better Auth session cookie (the signed-in admin), non-GET requests, and codes that don't exist. Everything else is logged as is: no de-duplication.
+
+Codes (`lib/codes.ts`) are 7 characters from `23456789ABCDEFGHJKMNPQRSTUVWXYZ` (no look-alikes 0 O 1 I L), generated with `crypto.getRandomValues` and rejection sampling so every character is equally likely.
+
 ## Content and data
 
 | File | Holds |
@@ -59,7 +74,7 @@ Hackathon posts are not embedded. "View post" in `components/HackathonCard.tsx` 
 
 | Binding | Used by |
 |---|---|
-| `DB` (D1) | `/health` now; link tracking (Phase 3) and auth (Phase 4) |
+| `DB` (D1) | Link lookups (`/l/`), event logging (middleware), `/health`; auth from Phase 4 |
 | `MEDIA` (R2) | Reserved for project images (Phase 7) |
 | `ASSETS` | Static files from `public/` (the portrait) and the build |
 

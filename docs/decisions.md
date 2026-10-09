@@ -29,3 +29,13 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 - **Desktop breakpoint at 900px.** The design has 390px and 1440px artboards; at 900px the two-column layouts fit comfortably.
 - **"Save contact" links to `/contact.vcf`,** which is built in Phase 6 as planned. Until then the button leads to a 404.
 - **Screenshots with Playwright** (`pnpm screenshot <url> <dir> <paths…>`), using the installed Chrome, for 390px/1440px comparisons against the design.
+
+## 2026-10-09 — Phase 3
+
+- **Redirect target is `/{lang}?l=CODE`**, not `/{lang}/?l=CODE` as written in BUILD.md: the site has no trailing slashes, and the slash would cost an extra redirect.
+- **`/L/` is a middleware rewrite** to the `/l/` handler instead of a second route folder: `app/l` and `app/L` can't coexist on case-insensitive file systems (macOS).
+- **`waitUntil` from `cloudflare:workers`** runs the logging insert after the response, so it doesn't depend on how vinext wires `after()` into middleware.
+- **Admin exclusion checks that the Better Auth session cookie is present**, without validating it. That costs no database lookup on every tracked request. Someone faking the cookie could only hide their own visit.
+- **Requests to `/` with `?l=` are not logged there;** they are logged once on the `/en` or `/ar` page they redirect to.
+- **Test links are digital links named "TEST link N"**, so they don't use up printed card numbers. The seed script refuses to touch the production database.
+- **Local development uses the preview database's local copy.** Adding `preview_database_id` makes Wrangler key the local D1 state by that ID, so run `pnpm db:migrate:local` once after pulling.

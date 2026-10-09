@@ -1,21 +1,47 @@
+import { waitUntil } from "cloudflare:workers";
 import { NextResponse, type NextRequest } from "next/server";
 import { localeFromAcceptLanguage } from "@/lib/i18n";
+import { normalizeCode } from "@/lib/codes";
+import { isAdminRequest, recordEvent } from "@/lib/tracking";
 
-// "/" → "/en" or "/ar" from Accept-Language, keeping the query string (?l= etc.).
-// Phase 3 adds tracked-link logging here.
 export function middleware(request: NextRequest) {
-  const url = request.nextUrl.clone();
+  const url = request.nextUrl;
+
+  // "/" → "/en" or "/ar" from Accept-Language, keeping the query string (?l= etc.).
   if (url.pathname === "/") {
-    url.pathname = `/${localeFromAcceptLanguage(request.headers.get("accept-language"))}`;
+    const target = url.clone();
+    target.pathname = `/${localeFromAcceptLanguage(request.headers.get("accept-language"))}`;
     // 302 + Vary: the target depends on the visitor's language, so it must not be cached as one answer.
-    const response = NextResponse.redirect(url, 302);
+    const response = NextResponse.redirect(target, 302);
     response.headers.set("Vary", "Accept-Language");
     response.headers.set("Cache-Control", "private, no-store");
     return response;
+  }
+
+  // Printed QR codes encode the URL in uppercase (HTTPS://ALTAIEH.TECH/L/CODE) for a
+  // smaller QR; serve /L/ with the same handler as /l/.
+  if (url.pathname.startsWith("/L/")) {
+    const target = url.clone();
+    target.pathname = `/l/${url.pathname.slice(3)}`;
+    return NextResponse.rewrite(target);
+  }
+
+  // Every public page opened with ?l=CODE is logged here, whether it came from a
+  // QR scan (via /l/) or from a link someone copied and shared. Logging runs after
+  // the response is sent, so it never slows the page down.
+  if (request.method === "GET") {
+    const code = normalizeCode(url.searchParams.get("l"));
+    if (code && !isAdminRequest(request)) {
+      waitUntil(
+        recordEvent(request, code).catch((error: unknown) => {
+          console.error("[tracking] failed to record event", error);
+        }),
+      );
+    }
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/L/:path*", "/en", "/en/:path*", "/ar", "/ar/:path*"],
 };
