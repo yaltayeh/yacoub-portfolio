@@ -1,0 +1,120 @@
+/*
+ * Calm Quantum design tokens.
+ * Source: the Claude Design system "Calm Quantum" (project/tokens.json), with
+ * page-level values from the "Personal Site — Homepage" canvas where it is more
+ * specific. Names match the design so the handoff reads one-to-one.
+ * Dark only: the design has a single "Night" theme.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Grounds */
+  --space: #0c0627;
+  --surface: #120838;
+  --surface-sidebar: #0f0830;
+  --surface-raised: #160b40;
+  --surface-glow: #1a0d47;
+  --surface-disc: #2a1466;
+  --surface-dialog: #140a3a; /* canvas: link detail dialog */
+
+  /* Text, strongest to faintest. Nothing lighter than ink-faint carries text. */
+  --ink: #f2edff;
+  --ink-soft: #d6ccf2;
+  --ink-muted: #bdb0de;
+  --ink-dim: #a396c9;
+  --ink-faint: #9486be;
+
+  /* Accent: the only hue */
+  --accent: #bfa3ff;
+  --accent-soft: #e2d4ff;
+  --accent-deep: #8f6bff;
+  --on-accent: #12063a;
+  --accent-08: #bfa3ff14;
+  --accent-14: #bfa3ff24;
+  --accent-24: #bfa3ff3d;
+  --accent-35: #bfa3ff59;
+  --accent-45: #bfa3ff73;
+
+  /* Lines */
+  --line-hair: #f2edff0f;
+  --line-soft: #f2edff14;
+  --line: #f2edff1a;
+  --line-strong: #f2edff24;
+  --line-control: #f2edff29;
+  --line-neutral: #f2edff2e;
+  --line-dialog: #f2edff1f; /* canvas: link detail dialog border */
+  --line-dashed: #5e4a99; /* 2.7:1 on space: always paired with the word "Next" */
+  --line-dashed-faint: #3e2c78;
+
+  --danger: #ff9f8e;
+
+  /* Nebula (hero and OG backgrounds) */
+  --nebula-core: rgba(91, 43, 196, 0.45);
+  --nebula-mid: rgba(60, 26, 128, 0.22);
+  --nebula-dust: rgba(148, 119, 187, 0.22);
+
+  --scrim: #0c0627b3;
+
+  /* Type families */
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Type scale: size / line-height / weight / tracking */
+  --text-hero-desktop: 600 76px/1 var(--font-sans);
+  --tracking-hero-desktop: -0.03em;
+  --text-hero: 600 44px/1.05 var(--font-sans);
+  --tracking-hero: -0.02em;
+  --text-stat: 600 38px/1 var(--font-sans);
+  --tracking-stat: -0.02em;
+  --text-h2: 600 28px/1.2 var(--font-sans);
+  --tracking-h2: -0.01em;
+  --text-h3: 600 20px/1.3 var(--font-sans);
+  --text-lead: 400 19px/1.5 var(--font-sans);
+  --text-body: 400 15px/1.55 var(--font-sans);
+  --text-ui: 500 14px/1.4 var(--font-sans);
+  --text-label: 500 13px/1.4 var(--font-sans);
+  --text-ar-h2: 600 28px/1.4 var(--font-arabic);
+  --text-ar-body: 400 15px/1.7 var(--font-arabic);
+  --text-eyebrow: 400 12px/1.4 var(--font-mono);
+  --tracking-eyebrow: 0.12em;
+  --text-status: 500 11px/1.4 var(--font-mono);
+  --tracking-status: 0.08em;
+  --text-tag: 400 12px/1.4 var(--font-mono);
+  --text-code: 400 12.5px/1.5 var(--font-mono);
+
+  /* Spacing */
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px; /* mobile gutter */
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-52: 52px;
+  --space-64: 64px; /* desktop gutter */
+
+  /* Radii grow with the size of the thing */
+  --radius-tag: 6px;
+  --radius-code: 8px;
+  --radius-icon: 10px;
+  --radius-control: 12px;
+  --radius-card: 14px;
+  --radius-panel: 16px;
+  --radius-dialog: 18px; /* canvas: link detail dialog */
+  --radius-sheet: 24px;
+  --radius-pill: 999px;
+
+  /* Depth comes from glow, never drop shadows */
+  --glow-node: 0 0 0 5px #bfa3ff29;
+  --glow-first: 0 0 22px -2px #bfa3ffb3;
+  --glow-photo: 0 0 0 1px #f2edff1f, 0 0 0 7px #0c0627, 0 0 0 8px #bfa3ff4d, 0 0 56px 8px #bfa3ff4d;
+  --nav-active: inset 0 -2px 0 #bfa3ff;
+  --focus-field: 0 0 0 3px #bfa3ff38;
+
+  /* Motion */
+  --pulse-duration: 3.6s;
+}
