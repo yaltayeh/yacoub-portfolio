@@ -5,8 +5,7 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 ## 2026-10-09 — Phase 1
 
 - **Two D1 databases, one R2 bucket.** Production uses `yacoub-portfolio-db`, branch previews use `yacoub-portfolio-db-preview`, so testing never touches real link data. Photos are read-only content, so both share one bucket, `yacoub-portfolio-media`.
-- **Previews are versions of the same Worker.** `env.preview` in `wrangler.jsonc` keeps the Worker name `yacoub-portfolio` and only swaps the bindings. Previews get their own URL without a second Worker, and secrets are set once. Trade-off: preview and production share secrets.
-- **Branch → env is chosen in `vite.config.ts`** from `WORKERS_CI_BRANCH`, so the Workers Builds commands did not need to change.
+- **Previews use Cloudflare's Worker Previews** (`npx wrangler preview`, the Workers Builds default for non-production branches) with a `previews` block in `wrangler.jsonc`. A first attempt with a Wrangler `env.preview` failed on Workers Builds, because `wrangler preview` requires the `previews` block. The native approach also gives previews their own secrets and needs no branch logic in the build.
 - **Migrations are applied by hand**, preview first, then production before merging (agreed with the owner). See `docs/deployment.md`.
 - **Kept the Wrangler config file** instead of vinext's newer `cloudflare.config.ts` setup. BUILD.md says to keep the existing config, and vinext still supports it.
 - **Removed Tailwind.** The scaffold included it, but it isn't in the BUILD.md stack, and the Calm Quantum design ships as plain CSS on CSS variables. Styling is plain CSS with the tokens in `app/styles/tokens.css`.

@@ -54,7 +54,7 @@ db/
   client.ts          per-request Drizzle client
   migrations/        SQL migrations (generated, applied with Wrangler)
 docs/                project documentation
-wrangler.jsonc       Worker config: production at the top level, `env.preview` for branches
+wrangler.jsonc       Worker config: production at the top level, `previews` for branch previews
 ```
 
 ## Documentation

@@ -1,12 +1,11 @@
 /**
  * Wrangler configuration: https://developers.cloudflare.com/workers/wrangler/configuration/
  *
- * Top level = production (the `main` branch).
- * `env.preview` = every other branch. It keeps the same Worker name so preview
- * builds become preview *versions* of this Worker (with their own URL) instead
- * of a second Worker, but it binds the preview database so previews never touch
- * production data. Bindings are non-inheritable, so each env lists all of them.
- * The build picks the env from WORKERS_CI_BRANCH (see vite.config.ts).
+ * Top level = production (the `main` branch, `wrangler deploy`).
+ * `previews` = Worker Previews for every other branch (`wrangler preview`):
+ * https://developers.cloudflare.com/workers/previews/configuration/
+ * Previews don't inherit production settings, so every binding the code reads
+ * is listed again there, pointed at preview-safe resources.
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
@@ -30,6 +29,8 @@
 			"binding": "DB",
 			"database_name": "yacoub-portfolio-db",
 			"database_id": "a4d2428f-662c-48f5-8561-f33c778ca747",
+			// Lets `wrangler d1 migrations apply DB --remote --preview` target the preview DB.
+			"preview_database_id": "3f799c24-b96f-4465-a85d-ca249fc0b53c",
 			"migrations_dir": "db/migrations"
 		}
 	],
@@ -42,29 +43,27 @@
 	"vars": {
 		"APP_ENV": "production"
 	},
-	"env": {
-		"preview": {
-			"name": "yacoub-portfolio",
-			"images": {
-				"binding": "IMAGES"
-			},
-			"d1_databases": [
-				{
-					"binding": "DB",
-					"database_name": "yacoub-portfolio-db-preview",
-					"database_id": "3f799c24-b96f-4465-a85d-ca249fc0b53c",
-					"migrations_dir": "db/migrations"
-				}
-			],
-			"r2_buckets": [
-				{
-					"binding": "MEDIA",
-					"bucket_name": "yacoub-portfolio-media"
-				}
-			],
-			"vars": {
-				"APP_ENV": "preview"
+	"previews": {
+		"images": {
+			"binding": "IMAGES"
+		},
+		"d1_databases": [
+			{
+				"binding": "DB",
+				"database_name": "yacoub-portfolio-db-preview",
+				"database_id": "3f799c24-b96f-4465-a85d-ca249fc0b53c",
+				"migrations_dir": "db/migrations"
 			}
+		],
+		// Media is read-only site content, so previews share the production bucket.
+		"r2_buckets": [
+			{
+				"binding": "MEDIA",
+				"bucket_name": "yacoub-portfolio-media"
+			}
+		],
+		"vars": {
+			"APP_ENV": "preview"
 		}
 	}
 }
