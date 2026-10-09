@@ -17,7 +17,7 @@ Requirements: Node 22+ and pnpm 11 (`corepack enable`).
 ```sh
 pnpm install
 pnpm db:migrate:local   # create the local D1 tables
-pnpm dev                # http://localhost:5173
+pnpm dev                # http://localhost:5173/en
 ```
 
 To run the production build in the Workers runtime:
@@ -36,6 +36,7 @@ Both commands share the same local database in `.wrangler/state`.
 | `pnpm build` | Production build into `dist/` |
 | `pnpm start` | Serve the built Worker locally |
 | `pnpm typecheck` | Run the TypeScript type-check |
+| `pnpm screenshot <url> <dir> <paths…>` | Full-page screenshots at 390px and 1440px (uses your installed Chrome) |
 | `pnpm cf-typegen` | Regenerate binding types after editing `wrangler.jsonc` |
 | `pnpm db:generate --name <name>` | Generate a migration from `db/schema.ts` |
 | `pnpm db:migrate:local` | Apply migrations to the local database |
@@ -45,14 +46,22 @@ Both commands share the same local database in `.wrangler/state`.
 ## Project structure
 
 ```
-app/                 routes (App Router)
+app/
+  [lang]/            public pages: Home, roadmap/, hackathons/ (root layout sets lang/dir)
   (dev)/             temporary checks: /health and /design-tokens (removed in Phase 6)
-  styles/tokens.css  design tokens as CSS variables
+  styles/            tokens.css (design tokens), site.css (public site)
   globals.css        base styles
+components/          header, footer, contact block, journey, hackathon card, icons
+content/             profile, journey, roadmap, hackathons (edit these to change the site)
+i18n/                en.ts and ar.ts UI strings
+lib/                 i18n helpers, fonts
 db/
   schema.ts          Drizzle schema
   client.ts          per-request Drizzle client
   migrations/        SQL migrations (generated, applied with Wrangler)
+middleware.ts        "/" → /en or /ar
+public/images/       portrait
+scripts/             screenshot helper
 docs/                project documentation
 wrangler.jsonc       Worker config: production at the top level, `previews` for branch previews
 ```
@@ -60,7 +69,9 @@ wrangler.jsonc       Worker config: production at the top level, `previews` for 
 ## Documentation
 
 - [`docs/BUILD.md`](docs/BUILD.md): build instructions and phases
+- [`docs/architecture.md`](docs/architecture.md): how routing, i18n, styling and data fit together
+- [`docs/content.md`](docs/content.md): how to update text, the journey, roadmap, hackathons and photo
 - [`docs/deployment.md`](docs/deployment.md): deploys, previews, databases and migrations
 - [`docs/decisions.md`](docs/decisions.md): notable decisions and deviations from BUILD.md
 
-More docs (architecture, content, admin) are added as the phases that need them land.
+`docs/admin.md` is added with the admin in Phase 4.

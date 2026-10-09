@@ -188,7 +188,7 @@ Match the Claude Design layouts. Content below is the source for the copy.
 - Photo inside the glowing orbit: `[TODO: photo]`, served from R2 or `/public`
 - Journey section — title "Building it, not just reading about it." / "أبنيه بيدي، لا أكتفي بالقراءة عنه." — subtitle "Five stations, from learning to code to quantum-resistant cryptography." / "خمس محطات، من تعلّم البرمجة إلى التشفير المقاوم للحوسبة الكمّية."
 - Explore section (links to Roadmap, Projects, Hackathons) with the web-background note. **Hide the Projects card and nav item until Phase 7.**
-- Contact block: "We just met. Let's stay in touch." / "التقينا للتو. لنبقَ على تواصل." with Save contact, Email, WhatsApp, LinkedIn, GitHub.
+- Contact block: "We just met. Let's stay in touch." / "التقينا للتو. لنبقَ على تواصل." with Save contact, Email, LinkedIn, GitHub.
 
 ### 8.2 Journey stations (shared by Home and Roadmap)
 
@@ -197,9 +197,9 @@ Keep this in one data file (`/content/journey.ts`) with EN/AR fields.
 | # | Title | Status | EN | AR | Tags |
 |---|---|---|---|---|---|
 | 1 | 42 Common Core | completed `[TODO: month year]` | Learned to code through peer learning, no teachers. | تعلّمت البرمجة عبر التعلّم بين الأقران، دون معلّمين. | — |
-| 2 | ft_ssl | in progress | Implementing hash functions and ciphers from scratch in C. | أبني دوال التجزئة وخوارزميات التشفير من الصفر بلغة C. | MD5, SHA-256, SHA-512, RSA |
-| 3 | Networking / الشبكات | in progress | ft_ping and ft_traceroute: understanding how data travels. | ft_ping وft_traceroute: فهم كيف تنتقل البيانات عبر الشبكة. | ft_ping, ft_traceroute |
-| 4 | Hardware Password Manager / مدير كلمات مرور على العتاد | in progress | A password manager on ESP32 that encrypts and stores passwords on the device itself. | مدير كلمات مرور على ESP32 يشفّر كلمات السر ويخزّنها داخل الجهاز نفسه. | ESP32, Embedded, Encryption |
+| 2 | ft_ssl | in progress | Implementing hash functions and ciphers from scratch in C. | أبني دوال التجزئة وخوارزميات التشفير من الصفر بلغة C. | MD5, SHA-256, SHA-512, RSA, DSA, PBKDF2 |
+| 3 | Networking / الشبكات | in progress | ft_ping and ft_traceroute: understanding how data travels. | ft_ping وft_traceroute: فهم كيف تنتقل البيانات عبر الشبكة. | ft_ping, ft_traceroute, BGP, nmap |
+| 4 | Hardware Password Manager / مدير كلمات مرور على العتاد | in progress | A password manager on ESP32 that encrypts and stores passwords on the device itself. | مدير كلمات مرور على ESP32 يشفّر كلمات السر ويخزّنها داخل الجهاز نفسه. | ESP32, Embedded, Encryption, PSA Crypto API |
 | 5 | Post-Quantum Cryptography / التشفير ما بعد الكمّي | next | Building quantum-resistant algorithms the same way. | بناء خوارزميات مقاومة للحوسبة الكمّية بالطريقة نفسها. | ML-KEM, ML-DSA |
 
 The path is solid through completed and in-progress stations and dashed before "next".
@@ -227,25 +227,24 @@ The last item visually references station 4 (same project evolving).
 - Title: "Where I competed and collaborated." / "حيث نافست وتعاونت."
 - Stats: **computed from the data**, not hard-coded: total hackathons, count of 1st places, distinct countries. (Currently 6 · 4× 1st Place · 3 Countries.)
 - Placement badges: 1st Place (accent glow), 2nd Place (softer accent), Participated (dignified neutral). AR: المركز الأول / المركز الثاني / مشاركة. International tag: International / دولي.
-- **LinkedIn embeds are lazy:** a "View post" / "عرض المنشور" button expands the card and only then injects the iframe. Never load embeds on page load. Frame them in a dark container.
-- Embed URL: `https://www.linkedin.com/embed/feed/update/urn:li:{type}:{id}`. Note that the Dahab post is a `share` URN, the others are `activity`; store the URN type per item.
+- **"View post" / "عرض المنشور" opens the LinkedIn post** (`linkedInUrl`) in a new tab. Posts are not embedded on the site.
 - Optional fields (problem, what we built, my role, takeaway, tech tags) render only when present.
 
-Data (`/content/hackathons.ts`), extend the owner's existing type with `country`, `international`, `urnType`:
+Data (`/content/hackathons.ts`), extend the owner's existing type with `country` and `international`:
 
 ```ts
 export const hackathons: Hackathon[] = [
-  { slug: "42-asia-hackathon-bangkok", title: "42 Asia Hackathon", year: "2025", location: "Bangkok, Thailand", country: "TH", international: true, placement: "2nd Place", urnType: "activity", linkedInEmbedId: "7394622237187842048", linkedInUrl: "https://www.linkedin.com/posts/42amman_asiahackathon2025-activity-7394622237187842048-zdF0" },
-  { slug: "mena-devs-hackathon", title: "MENA Devs Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", urnType: "activity", linkedInEmbedId: "7384198569077055488", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2" },
-  { slug: "joddb-hackathon", title: "JODDB Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", urnType: "activity", linkedInEmbedId: "7371465399256772608", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI" },
-  { slug: "dahab-hackathon", title: "Dahab Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", urnType: "share", linkedInEmbedId: "7335669999644176386", linkedInUrl: "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j" },
-  { slug: "42-asia-hackathon-seoul", title: "42 Asia Hackathon", year: "2024", location: "Seoul, Korea", country: "KR", international: true, placement: "Participated", urnType: "activity", linkedInEmbedId: "7245402011624423428", linkedInUrl: "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53" },
-  { slug: "orange-coding-academy-hackathon", title: "Orange Coding Academy's Hackathon", year: "2024", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", urnType: "activity", linkedInEmbedId: "7217499033664155648", linkedInUrl: "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT" },
+  { slug: "42-asia-hackathon-bangkok", title: "42 Asia Hackathon", year: "2025", location: "Bangkok, Thailand", country: "TH", international: true, placement: "2nd Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_asiahackathon2025-activity-7394622237187842048-zdF0" },
+  { slug: "mena-devs-hackathon", title: "MENA Devs Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2" },
+  { slug: "joddb-hackathon", title: "JODDB Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI" },
+  { slug: "dahab-hackathon", title: "Dahab Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j" },
+  { slug: "42-asia-hackathon-seoul", title: "42 Asia Hackathon", year: "2024", location: "Seoul, Korea", country: "KR", international: true, placement: "Participated", linkedInUrl: "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53" },
+  { slug: "orange-coding-academy-hackathon", title: "Orange Coding Academy's Hackathon", year: "2024", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT" },
 ];
 ```
 
 ### 8.5 Contact details
-`[TODO: email]`, `[TODO: WhatsApp number in international format]`, `[TODO: LinkedIn URL]`, `[TODO: GitHub URL]`. Keep them in one config file (`/content/profile.ts`) used by the contact block and the vCard.
+Email `yacoubaltaieh@gmail.com`, LinkedIn `https://www.linkedin.com/in/yacoub-altaieh`, GitHub `https://github.com/yaltayeh`. No WhatsApp or phone number. Keep them in one config file (`/content/profile.ts`) used by the contact block and the vCard.
 
 ---
 
@@ -279,7 +278,7 @@ Match the Claude Design admin screens. Calm, dense, fast; mobile matters most (u
 
 ## 10. vCard, metadata, link previews
 
-- **`/contact.vcf`**: vCard 3.0 built from `/content/profile.ts` (name, email, phone, URL `https://altaieh.tech`, LinkedIn, GitHub, title "Cryptography · 42 Amman", photo optional). `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: attachment; filename="yacoub-altaieh.vcf"`.
+- **`/contact.vcf`**: vCard 3.0 built from `/content/profile.ts` (name, email, URL `https://altaieh.tech`, LinkedIn, GitHub, title "Cryptography · 42 Amman", photo optional). `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: attachment; filename="yacoub-altaieh.vcf"`.
 - **Open Graph / Twitter meta on every public page**, per locale:
 
 | | EN | AR |
@@ -296,10 +295,10 @@ Match the Claude Design admin screens. Calm, dense, fast; mobile matters most (u
 ## 11. Quality bar
 
 - **Mobile-first.** Test at 390px first. The home page must be usable and fast immediately after a QR scan on a mid-range phone over mobile data.
-- **Performance:** public pages cached at the edge where possible; fonts subset and preloaded (`font-display: swap`); no client JS on public pages except the hero animation, scroll reveal of the journey path, language toggle and hackathon expanders. Target Lighthouse ≥ 95 on mobile.
+- **Performance:** public pages cached at the edge where possible; fonts subset and preloaded (`font-display: swap`); no client JS on public pages except the hero animation, scroll reveal of the journey path, and language toggle. Target Lighthouse ≥ 95 on mobile.
 - **Motion:** the hero particles and journey glow must be subtle. Respect `prefers-reduced-motion` by disabling all animation.
 - **Accessibility:** contrast AA, visible focus states, tap targets ≥ 44px, semantic landmarks, alt text.
-- **Security:** CSP that allows only self, Google Fonts if used, and `www.linkedin.com` in `frame-src`. Admin pages `noindex`. Rate-limit the login endpoint.
+- **Security:** CSP that allows only self, and Google Fonts if used (no third-party frames). Admin pages `noindex`. Rate-limit the login endpoint.
 - **Code:** strict TypeScript, no `any` in domain code, small focused modules, shared constants (code alphabet, bot list, locales) in one place.
 
 ### Documentation
@@ -402,7 +401,7 @@ Stop at the end of each phase, summarize what was done and anything that deviate
 ## 14. Open items for the owner
 
 - [ ] Final photo (homepage orbit + OG image)
-- [ ] Email, WhatsApp number, LinkedIn URL, GitHub URL
+- [x] Email, LinkedIn URL, GitHub URL (no WhatsApp)
 - [ ] Month/year the 42 Common Core was completed
 - [ ] Confirm roadmap timeframes
 - [ ] Optional details per hackathon (problem, what we built, role, takeaway)
