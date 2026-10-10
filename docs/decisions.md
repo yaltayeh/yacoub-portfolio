@@ -39,3 +39,15 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 - **Requests to `/` with `?l=` are not logged there;** they are logged once on the `/en` or `/ar` page they redirect to.
 - **Test links are digital links named "TEST link N"**, so they don't use up printed card numbers. The seed script refuses to touch the production database.
 - **Local development uses the preview database's local copy.** Adding `preview_database_id` makes Wrangler key the local D1 state by that ID, so run `pnpm db:migrate:local` once after pulling.
+
+## 2026-10-10 — Phase 4
+
+- **PBKDF2-SHA256 (WebCrypto, 100,000 iterations) instead of Better Auth's default scrypt.** Scrypt runs in JavaScript and can exceed the Workers CPU limit; WebCrypto's PBKDF2 is native. Stored as `pbkdf2-sha256$iterations$salt$hash`, so the iteration count can be raised later without breaking existing hashes.
+- **Login rate limit with database storage** (5/minute on `/sign-in/email`), so the limit holds across Worker isolates instead of per isolate (memory).
+- **Sessions last 30 days** (refreshed daily), with a 5-minute signed cookie cache to avoid a D1 read on every admin request.
+- **The link detail sheet is server-rendered from `?link=`**, and the client component only handles dialog behaviour, editing and downloads. Refresh, back/forward and deep links work without an extra API.
+- **"Name a link" previews the match while typing** from a list of card numbers sent with the page, so there's no round trip before tapping Open. Unnamed links open in "naming mode" (labelled fields + Save, Done on the keyboard saves and returns to the Overview); named links show inline editing.
+- **QR preview and SVG/PNG downloads are in the sheet already** (BUILD.md lists per-link QR download under Phase 5); Phase 5 reuses `lib/qr.ts`.
+- **"Generate batch" links are hidden until Phase 5** (Overview, Links, Create), so no button leads to a missing page.
+- **New link reserves nothing:** the code shown in the form is a preview; on create it is used if still free, otherwise a fresh code is generated.
+- **Admin timestamps use Asia/Amman.**
