@@ -33,6 +33,7 @@ export function buildVCard({ photoJpegBase64 }: { photoJpegBase64?: string } = {
     `FN:${esc(profile.name.en)}`,
     `TITLE:${esc("Cryptography · 42 Amman")}`,
     contactLinks.email ? `EMAIL;TYPE=INTERNET,PREF:${profile.email}` : null,
+    !isTodo(profile.phone) ? `TEL;TYPE=CELL,VOICE:${profile.phone.replace(/[^\d+]/g, "")}` : null,
     `URL;TYPE=WORK:https://${SITE_HOST}`,
     // item*.X-ABLabel gives the links readable names in Apple Contacts.
     !isTodo(profile.linkedin) ? `item1.URL:${profile.linkedin}` : null,

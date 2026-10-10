@@ -246,7 +246,7 @@ export const hackathons: Hackathon[] = [
 ```
 
 ### 8.5 Contact details
-Email `yacoubaltaieh@gmail.com`, LinkedIn `https://www.linkedin.com/in/yacoub-altaieh`, GitHub `https://github.com/yaltayeh`. No WhatsApp or phone number. Keep them in one config file (`/content/profile.ts`) used by the contact block and the vCard.
+Email `yacoubaltaieh@gmail.com`, phone `+962 78 115 7799` (in the vCard only, not shown on the site), LinkedIn `https://www.linkedin.com/in/yacoub-altaieh`, GitHub `https://github.com/yaltayeh`. No WhatsApp. Keep them in one config file (`/content/profile.ts`) used by the contact block and the vCard.
 
 ---
 
@@ -280,7 +280,7 @@ Match the Claude Design admin screens. Calm, dense, fast; mobile matters most (u
 
 ## 10. vCard, metadata, link previews
 
-- **`/contact.vcf`**: vCard 3.0 built from `/content/profile.ts` (name, email, URL `https://altaieh.tech`, LinkedIn, GitHub, title "Cryptography · 42 Amman", photo optional). `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: attachment; filename="yacoub-altaieh.vcf"`.
+- **`/contact.vcf`**: vCard 3.0 built from `/content/profile.ts` (name, email, phone, URL `https://altaieh.tech`, LinkedIn, GitHub, title "Cryptography · 42 Amman", photo optional). `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: attachment; filename="yacoub-altaieh.vcf"`.
 - **Open Graph / Twitter meta on every public page**, per locale:
 
 | | EN | AR |
@@ -403,7 +403,7 @@ Stop at the end of each phase, summarize what was done and anything that deviate
 ## 14. Open items for the owner
 
 - [ ] Final photo (homepage orbit + OG image)
-- [x] Email, LinkedIn URL, GitHub URL (no WhatsApp)
+- [x] Email, phone, LinkedIn URL, GitHub URL (no WhatsApp)
 - [ ] Month/year the 42 Common Core was completed
 - [ ] Confirm roadmap timeframes
 - [ ] Optional details per hackathon (problem, what we built, role, takeaway)

@@ -70,6 +70,6 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 - **HSTS without `includeSubDomains`**, because other projects live on subdomains of the same zone.
 - **OG images are rendered from the design artboards with Playwright** (`scripts/render-og.mjs`), so changing the photo means one command.
 - **Favicon:** the two-circle logo mark on a dark rounded square (it disappears on light browser tabs otherwise).
-- **vCard:** no phone (by request), LinkedIn and GitHub as labelled URLs plus `X-SOCIALPROFILE`, photo on the disc colour.
+- **vCard:** phone number included (`TEL;TYPE=CELL`) but not shown anywhere on the site, no WhatsApp (by request), LinkedIn and GitHub as labelled URLs plus `X-SOCIALPROFILE`, photo on the disc colour.
 - **Hackathon `linkedInUrl` renamed `postUrl`**, because the Bangkok entry now links to the CPF news article (owner's request). BUILD.md updated.
 - **Removed:** the temporary `/health` and `/design-tokens` pages and `scripts/seed-test-links.ts`.

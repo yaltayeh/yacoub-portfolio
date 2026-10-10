@@ -8,7 +8,7 @@ Anything written as `[TODO: ...]` shows on the site as a visible placeholder unt
 
 ## Contact details — `content/profile.ts`
 
-`email`, `linkedin` (full profile URL) and `github` (full URL). They feed the contact block, the short links in the Home hero, and the "Save contact" card (`/contact.vcf`). There is deliberately no phone or WhatsApp. If a value is set back to `"[TODO: ...]"`, its button shows greyed out.
+`email`, `phone` (international format; only in the "Save contact" card, not shown on the site), `linkedin` (full profile URL) and `github` (full URL). They feed the contact block, the short links in the Home hero, and the "Save contact" card (`/contact.vcf`). There is deliberately no phone or WhatsApp. If a value is set back to `"[TODO: ...]"`, its button shows greyed out.
 
 ## The journey — `content/journey.ts`
 
