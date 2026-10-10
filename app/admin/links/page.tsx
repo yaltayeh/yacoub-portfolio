@@ -7,7 +7,7 @@ import { displayLinkUrl, qrLinkUrl, shareLinkUrl } from "@/lib/site";
 import { qrSvg } from "@/lib/qr";
 import { AdminShell } from "../_components/AdminShell";
 import { LinkSheet, type SheetData } from "../_components/LinkSheet";
-import { LinkIcon, Plus, Search } from "../_components/admin-icons";
+import { LinkIcon, Plus, QrIcon, Search } from "../_components/admin-icons";
 
 export const metadata: Metadata = { title: "Links" };
 export const dynamic = "force-dynamic";
@@ -87,9 +87,13 @@ export default async function LinksPage({ searchParams }: { searchParams: Promis
             </span>
           </div>
           <div className="page__actions">
-            <Link href="/admin/new" className="abtn abtn--primary abtn--sm">
+            <Link href="/admin/links/new" className="abtn abtn--primary abtn--sm">
               <Plus size={15} />
               New link
+            </Link>
+            <Link href="/admin/generate" className="abtn abtn--ghost abtn--sm only-desktop">
+              <QrIcon />
+              Generate batch
             </Link>
           </div>
         </header>
@@ -237,11 +241,21 @@ function EmptyLinks({ searching, total }: { searching: boolean; total: number })
         <LinkIcon size={26} />
       </span>
       <h2>No links yet</h2>
-      <p>Create a link for your CV or LinkedIn. Every visit and share will show up here.</p>
-      <Link href="/admin/new" className="abtn abtn--primary">
-        <Plus />
-        New link
-      </Link>
+      <p>
+        Create a link for your CV or LinkedIn, or generate a numbered batch to print on business cards. Every visit and share
+        will show up here.
+      </p>
+      <div className="empty__actions">
+        <Link href="/admin/links/new" className="abtn abtn--primary">
+          <Plus />
+          New link
+        </Link>
+        <Link href="/admin/generate" className="abtn abtn--ghost">
+          <QrIcon />
+          Generate a printed batch
+        </Link>
+      </div>
+      <p className="empty__note mono">Printed links start at #001</p>
     </div>
   );
 }

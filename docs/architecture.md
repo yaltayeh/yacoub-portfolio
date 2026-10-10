@@ -1,6 +1,6 @@
 # Architecture
 
-> Grows phase by phase. Covered so far: routing, i18n, styling, data, link tracking and the admin (Phases 1–4).
+> Grows phase by phase. Covered so far: routing, i18n, styling, data, link tracking, the admin and printed batches (Phases 1–5).
 
 ## Overview
 
@@ -59,9 +59,16 @@ Codes (`lib/codes.ts`) are 7 characters from `23456789ABCDEFGHJKMNPQRSTUVWXYZ` (
 - **Passwords** are hashed with PBKDF2-SHA256 through WebCrypto (`lib/password.ts`) instead of Better Auth's default scrypt, which is too CPU-heavy for Workers. The same module is used by `scripts/create-admin.ts`.
 - **Rate limiting:** Better Auth's limiter with database storage (shared by all Worker isolates); `/sign-in/email` allows 5 attempts per minute per IP (`cf-connecting-ip`).
 - **Protection, two layers:** the middleware redirects `/admin/*` requests without a session cookie to `/admin/login?next=…` (cheap, no DB); every admin page and server action then calls `requireAdmin()` (`lib/admin-session.ts`), which validates the session with Better Auth. A forged cookie gets past the first layer but not the second.
-- **Routes:** `app/admin/` has its own root layout (English, `noindex`). `/admin` (Overview), `/admin/links` (list + detail sheet driven by `?link=`), `/admin/new` (digital link), `/admin/login`, and `/api/auth/*` (Better Auth handler).
+- **Routes:** `app/admin/` has its own root layout (English, `noindex`). `/admin` (Overview), `/admin/links` (list + detail sheet driven by `?link=`), `/admin/links/new` (digital link), `/admin/generate` (batches), `/admin/generate/print` and `/admin/generate/zip` (exports), `/admin/login`, and `/api/auth/*` (Better Auth handler).
 - **Data:** all queries are in `lib/admin-data.ts`; mutations are server actions in `app/admin/actions.ts` (rename/notes, create digital link).
 - **QR codes** (`lib/qr.ts`, `uqr`): SVG, error correction M, encoding `HTTPS://ALTAIEH.TECH/L/CODE` in uppercase so the QR uses alphanumeric mode (version 2, 25×25, instead of version 3). They always point at the real domain, even from a preview.
+
+## Printed batches
+
+- `createCardBatch(count)` (`lib/admin-data.ts`) takes the next number after the highest existing card and inserts `count` card links in one D1 `batch` (a transaction: all or nothing). A unique clash (code collision or a simultaneous batch) retries with fresh codes and a fresh start number.
+- The print view (`/admin/generate/print?from=&to=`) lays out 24 cards per A4 sheet in mm units, with `@page { size: A4; margin: 0 }` and a page break per sheet; on screen it shows the sheets on a grey desk with a Print button.
+- The ZIP (`/admin/generate/zip?from=&to=`) is built in the Worker with `fflate`: one SVG per card with a 4-module quiet zone, named `card-NNN.svg`.
+- Verified end to end: the printed PDF, rasterized at 300 dpi and decoded with `zbarimg`, gives back exactly the URLs in the database.
 
 ## Content and data
 

@@ -53,7 +53,7 @@ Both commands share the same local database in `.wrangler/state`.
 app/
   [lang]/            public pages: Home, roadmap/, hackathons/ (root layout sets lang/dir)
   l/[code]/          tracked-link entry point (302 to /{lang}?l=CODE)
-  admin/             private admin (own root layout): overview, links, new, login
+  admin/             private admin (own root layout): overview, links (+ new), generate (+ print, zip), login
   api/auth/          Better Auth handler
   (dev)/             temporary checks: /health and /design-tokens (removed in Phase 6)
   styles/            tokens.css (design tokens), site.css (public site)

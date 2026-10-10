@@ -187,3 +187,58 @@ export async function createDigitalLink({ code, name, notes }: { code?: string |
   }
   throw new Error("Could not find a free code after 5 attempts");
 }
+
+export const MAX_BATCH = 500;
+
+/** The number the next printed card gets: one after the highest so far. */
+export async function nextCardNumber(): Promise<number> {
+  const [row] = await getDb().select({ max: sql<number | null>`max(${links.number})` }).from(links);
+  return (row?.max ?? 0) + 1;
+}
+
+/**
+ * Creates `count` printed card links with consecutive numbers continuing from
+ * the highest existing one. All inserts run in one D1 batch (a transaction),
+ * so a batch is created completely or not at all. On a unique clash (a code
+ * collision, or another batch created at the same moment) it retries with
+ * fresh codes and a fresh starting number.
+ */
+export async function createCardBatch(count: number): Promise<{ from: number; to: number }> {
+  if (!Number.isInteger(count) || count < 1 || count > MAX_BATCH) throw new Error(`count must be 1–${MAX_BATCH}`);
+  const db = getDb();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const from = await nextCardNumber();
+    const codes = new Set<string>();
+    while (codes.size < count) codes.add(generateCode());
+    const createdAt = new Date();
+    const inserts = [...codes].map((code, i) =>
+      db.insert(links).values({ code, number: from + i, kind: "card", name: null, notes: null, createdAt }),
+    );
+    try {
+      const [first, ...rest] = inserts;
+      if (!first) throw new Error("empty batch");
+      await db.batch([first, ...rest]);
+      return { from, to: from + count - 1 };
+    } catch (error) {
+      if (!String(error).includes("UNIQUE")) throw error;
+    }
+  }
+  throw new Error("Could not create the batch after 3 attempts; try again.");
+}
+
+/** Printed card links with numbers in [from, to], in order. */
+export async function getCardRange(from: number, to: number): Promise<Link[]> {
+  return getDb()
+    .select()
+    .from(links)
+    .where(and(eq(links.kind, "card"), sql`${links.number} between ${from} and ${to}`))
+    .orderBy(asc(links.number));
+}
+
+/** Parses ?from=&to= into a sane card range (at most MAX_BATCH long), or null. */
+export function parseRange(fromRaw: string | undefined, toRaw: string | undefined): { from: number; to: number } | null {
+  const from = Number(fromRaw);
+  const to = Number(toRaw);
+  if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to < from || to - from >= MAX_BATCH) return null;
+  return { from, to };
+}

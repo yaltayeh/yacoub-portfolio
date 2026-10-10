@@ -10,7 +10,7 @@ export type AdminSection = "overview" | "links" | "create";
 const items: { key: AdminSection; href: string; label: string; icon: ReactNode }[] = [
   { key: "overview", href: "/admin", label: "Overview", icon: <Grid size={22} /> },
   { key: "links", href: "/admin/links", label: "Links", icon: <LinkIcon size={22} /> },
-  { key: "create", href: "/admin/new", label: "Create", icon: <PlusSquare size={22} /> },
+  { key: "create", href: "/admin/links/new", label: "Create", icon: <PlusSquare size={22} /> },
 ];
 
 /** Sidebar on desktop, bottom tab bar on mobile. */

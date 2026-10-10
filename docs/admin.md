@@ -39,7 +39,21 @@ Each link has its own address (`/admin/links?link=X7K2P9Q` or `?link=17`), so yo
 
 ## Digital links
 
-**Create → New link** makes a single link for your CV, LinkedIn, GitHub or one company application. Pick what it's for (it suggests a name), adjust the name and notes, then **Create link**. Printed card links come from batches (Phase 5).
+**Create → New link** (`/admin/links/new`) makes a single link for your CV, LinkedIn, GitHub or one company application. Give it a name (and notes if you like), then **Create link**. The link opens straight away so you can copy it or download its QR.
+
+## Printing business cards
+
+1. **Create → Generate batch** (`/admin/generate`).
+2. Choose how many links (presets 10 / 25 / 50 / 100, up to 500). The page shows the numbers you'll get, continuing from your highest card (the first batch starts at `#001`).
+3. Press **Generate N links**. Nothing is created before this. The new links appear as a grid of QR codes.
+4. Export:
+   - **Print sheet (A4)** opens a print view with 24 cards per A4 page (4 × 6), each QR with its number and code, and dashed cut lines. Press **Print**, choose A4, margins **None** and scale **100%**, and print or save as PDF.
+   - **Download ZIP (SVG)** gives one file per card, `card-051.svg`, `card-052.svg`, …, for a printer or designer. Each has a proper white quiet zone.
+5. Hand out the cards, then name each one as you go (see "Naming a card").
+
+To reprint or re-export cards you made earlier, use **Reprint or export a range** at the bottom of the Generate page (e.g. 51 to 100).
+
+QR codes always point to `https://altaieh.tech/l/CODE` (encoded in capitals for a smaller, easier-to-scan code), even when you generate them on a preview site. They start working once the domain is connected (Phase 6).
 
 ## What gets recorded
 

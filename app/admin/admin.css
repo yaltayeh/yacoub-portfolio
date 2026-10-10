@@ -637,8 +637,12 @@
 
 .quick {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+.quick .abtn {
+  padding-inline: 10px;
+  font-size: 14px;
 }
 
 /* ---------- Stats ---------- */
@@ -1678,5 +1682,453 @@
   }
   .new-link__actions .abtn--primary {
     flex: 0 0 auto;
+  }
+}
+
+.empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.empty__note {
+  font-size: 12px !important;
+  color: var(--ink-faint) !important;
+}
+.name-link__missing a {
+  color: var(--accent);
+}
+
+/* ---------- Create tabs ---------- */
+.page__head--wrap {
+  flex-wrap: wrap;
+}
+.create-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  padding: 4px;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  border: 1px solid #f2edff1a;
+}
+.create-tabs__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 9px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.create-tabs__item:hover {
+  color: var(--ink);
+}
+.create-tabs__item[aria-current="page"] {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+.page__intro {
+  margin: -6px 4px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+@media (min-width: 900px) {
+  .create-tabs {
+    display: flex;
+    width: auto;
+  }
+  .create-tabs__item {
+    min-height: 38px;
+  }
+  .page__intro {
+    margin: -8px 0 0;
+    font-size: 14px;
+  }
+}
+
+/* ---------- Generate batch ---------- */
+.batch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+.batch-form__count-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.batch-form__input {
+  height: 54px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+}
+.batch-form__presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.preset {
+  min-height: 44px;
+  border-radius: var(--radius-icon);
+  border: 1px solid #f2edff29;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  cursor: pointer;
+}
+.preset[aria-pressed="true"] {
+  border-color: var(--accent);
+}
+.batch-form__range {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-icon);
+  background: #f2edff0a;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+.batch-form__range strong {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.batch-form__submit {
+  min-height: 54px;
+  font-size: 16px;
+}
+@media (min-width: 900px) {
+  .batch-form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px 32px;
+    padding: 22px 24px;
+  }
+  .batch-form__count-row {
+    flex-direction: row;
+    align-items: center;
+  }
+  .batch-form__input {
+    width: 110px;
+    height: 46px;
+    font-size: 18px;
+  }
+  .batch-form__presets {
+    display: flex;
+  }
+  .preset {
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+  }
+  .batch-form__range {
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+    background: none;
+  }
+  .batch-form__range strong {
+    font-size: 26px;
+  }
+  .batch-form__submit {
+    margin-inline-start: auto;
+    min-height: 48px;
+    padding: 0 22px;
+    font-size: 15px;
+  }
+  .batch-form .field__error {
+    flex-basis: 100%;
+  }
+}
+
+.batch-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.batch-preview__head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 4px;
+}
+.batch-preview__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.batch-preview__title h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.batch-preview__title .mono {
+  font-size: 12px;
+}
+.batch-preview__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.batch-preview__actions .abtn {
+  min-height: 48px;
+  padding-inline: 8px;
+}
+.qr-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.qr-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 8px 8px;
+  border-radius: var(--radius-icon);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+.qr-tile__code {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  margin-bottom: 6px;
+  padding: 5px;
+  border-radius: 6px;
+  background: #ffffff;
+}
+.qr-tile__code svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.qr-tile__num {
+  font-size: 13px;
+  font-weight: 500;
+}
+.qr-tile__id {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+.qr-tile--more {
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: 1px dashed #f2edff2e;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-align: center;
+}
+.qr-tile--more .mono {
+  font-size: 18px;
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .batch-preview {
+    gap: 14px;
+  }
+  .batch-preview__head {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+  }
+  .batch-preview__title h2 {
+    font-size: 17px;
+  }
+  .batch-preview__actions {
+    display: flex;
+  }
+  .batch-preview__actions .abtn {
+    min-height: 42px;
+    padding-inline: 16px;
+  }
+  .qr-grid {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 12px;
+  }
+  .qr-tile {
+    padding: 14px 12px 12px;
+    border-radius: var(--radius-control);
+  }
+  .qr-tile__code {
+    max-width: 108px;
+    margin-bottom: 8px;
+    padding: 6px;
+    border-radius: var(--radius-code);
+  }
+  .qr-tile__num {
+    font-size: 14px;
+  }
+  .qr-tile__id {
+    font-size: 11px;
+  }
+  .qr-tile--more {
+    min-height: 170px;
+  }
+}
+
+.reprint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  padding: 14px 16px;
+}
+.reprint__title {
+  flex-basis: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+.reprint label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+.reprint .input {
+  width: 96px;
+  height: 40px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+
+/* ---------- A4 print sheet ---------- */
+/* On screen: white A4 pages on a grey desk, with a toolbar. On paper: just the pages. */
+.print-view {
+  min-height: 100dvh;
+  padding: 0 0 40px;
+  background: #3a3550;
+  color: #111111;
+}
+.print-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 24px;
+  padding: 12px 20px;
+  background: var(--surface-sidebar);
+  border-block-end: 1px solid var(--line-soft);
+  color: var(--ink);
+  font-size: 14px;
+}
+.print-toolbar__hint {
+  flex: 1;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+.sheet-a4 {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto 24px;
+  padding: 10mm;
+  display: flex;
+  flex-direction: column;
+  gap: 4mm;
+  background: #ffffff;
+  font-family: var(--font-sans);
+  box-shadow: 0 10px 40px #00000066;
+  overflow: hidden;
+}
+.sheet-a4__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8mm;
+  font-size: 9pt;
+  color: #555555;
+}
+.sheet-a4__head strong {
+  color: #111111;
+}
+.sheet-a4__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* Fixed rows (6 per sheet) so a partial last sheet keeps the same card size
+     and the cut lines stop where the cards stop. */
+  grid-auto-rows: 44.5mm;
+  border-block-start: 1px dashed #999999;
+  border-inline-start: 1px dashed #999999;
+}
+.sheet-a4__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5mm;
+  border-inline-end: 1px dashed #999999;
+  border-block-end: 1px dashed #999999;
+}
+.sheet-a4__qr {
+  display: block;
+  width: 28mm;
+  height: 28mm;
+  margin-bottom: 1mm;
+}
+.sheet-a4__qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sheet-a4__num {
+  font-size: 12pt;
+  font-weight: 500;
+  color: #111111;
+}
+.sheet-a4__code {
+  font-size: 9pt;
+  color: #555555;
+}
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  html,
+  body,
+  .print-view {
+    background: #ffffff !important;
+    padding: 0;
+    min-height: 0;
+  }
+  .print-toolbar {
+    display: none;
+  }
+  .sheet-a4 {
+    margin: 0;
+    box-shadow: none;
+    break-after: page;
+  }
+  .sheet-a4:last-child {
+    break-after: auto;
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 import { cardNumber } from "@/lib/format";
@@ -87,7 +88,7 @@ export function NameLinkForm({ cards, nextUnnamed }: { cards: Card[]; nextUnname
             ) : (
               " You haven't generated any printed links yet."
             )}{" "}
-            Check the number printed on the card.
+            Check the number printed on the card, or <Link href="/admin/generate">generate more printed links</Link>.
           </span>
         ) : match ? (
           <span className="name-link__match">

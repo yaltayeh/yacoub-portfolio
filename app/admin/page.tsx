@@ -7,7 +7,7 @@ import { LogoMark } from "@/components/icons";
 import { AdminShell } from "./_components/AdminShell";
 import { EventRow } from "./_components/EventRow";
 import { NameLinkForm } from "./_components/NameLinkForm";
-import { Eye, Plus, Share } from "./_components/admin-icons";
+import { Eye, Plus, QrIcon, Share } from "./_components/admin-icons";
 
 export const metadata: Metadata = { title: "Overview" };
 export const dynamic = "force-dynamic";
@@ -30,9 +30,13 @@ export default async function OverviewPage() {
             <span className="page__date only-desktop">{today(true)}</span>
           </div>
           <div className="page__actions only-desktop">
-            <Link href="/admin/new" className="abtn abtn--primary abtn--sm">
+            <Link href="/admin/links/new" className="abtn abtn--primary abtn--sm">
               <Plus />
               New link
+            </Link>
+            <Link href="/admin/generate" className="abtn abtn--ghost abtn--sm">
+              <QrIcon />
+              Generate batch
             </Link>
           </div>
         </header>
@@ -40,9 +44,13 @@ export default async function OverviewPage() {
         <NameLinkForm cards={cards} nextUnnamed={c.nextUnnamed} />
 
         <div className="quick only-mobile">
-          <Link href="/admin/new" className="abtn abtn--ghost">
+          <Link href="/admin/links/new" className="abtn abtn--ghost">
             <Plus />
             New link
+          </Link>
+          <Link href="/admin/generate" className="abtn abtn--ghost">
+            <QrIcon />
+            Generate batch
           </Link>
         </div>
 

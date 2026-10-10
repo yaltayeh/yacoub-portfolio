@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-session";
-import { createDigitalLink, updateLink } from "@/lib/admin-data";
+import { createCardBatch, createDigitalLink, MAX_BATCH, updateLink } from "@/lib/admin-data";
 
 export type SaveResult = { ok: true; name: string | null; notes: string | null } | { ok: false; error: string };
 
@@ -28,4 +28,17 @@ export async function createLink(_prev: CreateState, form: FormData): Promise<Cr
     notes: String(form.get("notes") ?? ""),
   });
   redirect(`/admin/links?link=${row.code}&created=1`);
+}
+
+export type BatchState = { error?: string } | undefined;
+
+/** "Generate batch": creates numbered card links, then shows them for printing. */
+export async function generateBatch(_prev: BatchState, form: FormData): Promise<BatchState> {
+  await requireAdmin();
+  const count = Number(form.get("count"));
+  if (!Number.isInteger(count) || count < 1 || count > MAX_BATCH) {
+    return { error: `Choose between 1 and ${MAX_BATCH} links.` };
+  }
+  const { from, to } = await createCardBatch(count);
+  redirect(`/admin/generate?from=${from}&to=${to}&created=1`);
 }

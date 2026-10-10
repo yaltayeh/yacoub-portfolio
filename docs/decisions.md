@@ -51,3 +51,12 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 - **"Generate batch" links are hidden until Phase 5** (Overview, Links, Create), so no button leads to a missing page.
 - **New link reserves nothing:** the code shown in the form is a preview; on create it is used if still free, otherwise a fresh code is generated.
 - **Admin timestamps use Asia/Amman.**
+
+## 2026-10-10 — Phase 5
+
+- **New link moved to `/admin/links/new`, without the "Used for" presets** (owner's request). BUILD.md's route table was updated.
+- **"Create" has two tabs:** New link (`/admin/links/new`) and Generate batch (`/admin/generate`), as in the design.
+- **Batches are capped at 500** (the design's input maximum) and created in a single D1 transaction.
+- **The preview grid shows the first 23 cards** plus a "+N more in the export" tile, as in the design; the print view and the ZIP always contain every card in the range.
+- **Reprinting** is a small "from / to" form on the Generate page, so any earlier range can be printed or exported again.
+- **Print QR codes are pure black on white with no extra margin** (each card cell is white space already); the ZIP's standalone SVGs keep the standard 4-module quiet zone.
