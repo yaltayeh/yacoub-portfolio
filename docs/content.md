@@ -18,7 +18,7 @@ The five stations shown on Home and Roadmap, in order. For each station:
 |---|---|
 | `title` | Station name. Wrap code names in backticks to show them in mono: `` "`ft_ssl`" ``. |
 | `status` | `"completed"`, `"inProgress"` or `"next"`. It sets the node, the card style and the rail (solid up to the last in-progress station, dashed into "next"). |
-| `completedOn` | Shown on the Roadmap as "Completed · October 2025". Currently a TODO for 42 Common Core. |
+| `completedOn` | Shown on the Roadmap as "Completed · October 2025". 42 Common Core: July 2026. |
 | `description` | One line. |
 | `tags` | Technology chips, exactly as written. |
 | `command` | Optional terminal line under the description (ft_ssl has one). |

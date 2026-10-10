@@ -23,7 +23,7 @@ export const journey: Station[] = [
     id: "common-core",
     title: { en: "42 Common Core", ar: "42 Common Core" },
     status: "completed",
-    completedOn: { en: "[TODO: month year]", ar: "[TODO: الشهر السنة]" },
+    completedOn: { en: "July 2026", ar: "يوليو 2026" },
     description: {
       en: "Learned to code through peer learning, no teachers.",
       ar: "تعلّمت البرمجة عبر التعلّم بين الأقران، دون معلّمين.",

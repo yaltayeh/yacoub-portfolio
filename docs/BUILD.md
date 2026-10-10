@@ -198,7 +198,7 @@ Keep this in one data file (`/content/journey.ts`) with EN/AR fields.
 
 | # | Title | Status | EN | AR | Tags |
 |---|---|---|---|---|---|
-| 1 | 42 Common Core | completed `[TODO: month year]` | Learned to code through peer learning, no teachers. | تعلّمت البرمجة عبر التعلّم بين الأقران، دون معلّمين. | — |
+| 1 | 42 Common Core | completed July 2026 | Learned to code through peer learning, no teachers. | تعلّمت البرمجة عبر التعلّم بين الأقران، دون معلّمين. | — |
 | 2 | ft_ssl | in progress | Implementing hash functions and ciphers from scratch in C. | أبني دوال التجزئة وخوارزميات التشفير من الصفر بلغة C. | MD5, SHA-256, SHA-512, RSA, DSA, PBKDF2 |
 | 3 | Networking / الشبكات | in progress | ft_ping and ft_traceroute: understanding how data travels. | ft_ping وft_traceroute: فهم كيف تنتقل البيانات عبر الشبكة. | ft_ping, ft_traceroute, BGP, nmap |
 | 4 | Hardware Password Manager / مدير كلمات مرور على العتاد | in progress | A password manager on ESP32 that encrypts and stores passwords on the device itself. | مدير كلمات مرور على ESP32 يشفّر كلمات السر ويخزّنها داخل الجهاز نفسه. | ESP32, Embedded, Encryption, PSA Crypto API |
