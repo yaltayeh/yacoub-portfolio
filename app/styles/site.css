@@ -855,12 +855,28 @@ a[aria-disabled="true"] {
 .card--lift {
   box-shadow: 0 14px 40px -16px #bfa3ff66;
 }
+/* Station cards always stack: status → title → description → terminal line → tags.
+   The same layout whatever the number of tags, so text never gets squeezed. */
+.station-card {
+  display: flex;
+  flex-direction: column;
+}
 .station-card .station__title {
   margin-top: 10px;
 }
 .station-card .command,
 .station-card__tags .tags {
   margin-top: var(--space-12);
+}
+/* A comfortable reading measure for station descriptions. */
+.station__text {
+  max-width: 65ch;
+}
+/* The terminal line hugs its command instead of stretching across the card. */
+.station-card .command,
+.tl-card .command {
+  width: fit-content;
+  max-width: 100%;
 }
 
 /* Status chip */
@@ -988,39 +1004,20 @@ a[aria-disabled="true"] {
     margin-top: 14px;
   }
   .station-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "main tags";
-    align-items: end;
-    gap: 16px 32px;
     padding: 24px 26px;
     border-radius: var(--radius-panel);
-  }
-  .station-card--command {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas: "main code" "tags code";
-  }
-  .station-card__main {
-    grid-area: main;
   }
   .station-card .station__title {
     margin-top: 12px;
   }
+  .station-card .command,
+  .station-card__tags .tags {
+    margin-top: 14px;
+  }
   .station-card .command {
-    grid-area: code;
-    margin-top: 0;
     padding: 12px 14px;
     border-radius: var(--radius-icon);
     font-size: 13.5px;
-  }
-  .station-card__tags {
-    grid-area: tags;
-  }
-  .station-card__tags .tags {
-    margin-top: 0;
-  }
-  .station-card--command .station-card__tags .tags {
-    margin-top: -2px;
   }
 }
 
