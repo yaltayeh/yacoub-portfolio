@@ -83,7 +83,9 @@ Do not add other frameworks, CMSs, or hosted services without asking.
 | `/contact.vcf` | vCard for "Save contact" |
 | `/admin` | Admin overview (protected) |
 | `/admin/links` | Links list (protected) |
+| `/admin/links/new` | New digital link (protected) |
 | `/admin/generate` | Batch generation (protected) |
+| `/admin/generate/print`, `/admin/generate/zip` | A4 print sheet and ZIP of SVGs for a range (protected) |
 | `/admin/login` | Sign in |
 | `/api/auth/*` | Better Auth handler |
 

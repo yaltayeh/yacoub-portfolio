@@ -4,49 +4,17 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { createLink, type CreateState } from "../actions";
 
-const uses = [
-  { key: "cv", label: "CV", suggestion: "CV (PDF)" },
-  { key: "linkedin", label: "LinkedIn", suggestion: "LinkedIn profile" },
-  { key: "github", label: "GitHub", suggestion: "GitHub README" },
-  { key: "company", label: "Company", suggestion: "Application — " },
-  { key: "other", label: "Other", suggestion: "" },
-] as const;
-
-type UseKey = (typeof uses)[number]["key"];
-
 /** A single digital link (CV, LinkedIn, GitHub, one company). Cards come from batches. */
 export function NewLinkForm({ code, host }: { code: string; host: string }) {
   const [state, action, pending] = useActionState<CreateState, FormData>(createLink, undefined);
-  const [use, setUse] = useState<UseKey | null>(null);
   const [name, setName] = useState("");
 
   return (
     <div className="new-link">
       <form action={action} className="panel new-link__form">
         <p className="new-link__intro">
-          A single digital link for your CV, LinkedIn, GitHub or one company. For business cards, use a printed batch.
+          A single digital link for your CV, LinkedIn, GitHub or one company. For business cards, generate a printed batch.
         </p>
-
-        <fieldset className="field">
-          <legend>Used for</legend>
-          <div className="choice-row">
-            {uses.map((u) => (
-              <button
-                key={u.key}
-                type="button"
-                aria-pressed={use === u.key}
-                className="choice"
-                onClick={() => {
-                  setUse(u.key);
-                  setName(u.suggestion);
-                }}
-              >
-                {u.label}
-              </button>
-            ))}
-          </div>
-          <p className="field__help">Picking one fills in a suggested name. Edit it freely.</p>
-        </fieldset>
 
         <div className="field">
           <label htmlFor="new-name">Name</label>
