@@ -7,6 +7,13 @@ import { isAdminRequest, recordEvent } from "@/lib/tracking";
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
+  // One canonical host: www.altaieh.tech → altaieh.tech (permanent, path and query kept).
+  const host = request.headers.get("host") ?? "";
+  if (host.startsWith("www.")) {
+    const target = new URL(`${url.pathname}${url.search}`, `https://${host.slice(4)}`);
+    return NextResponse.redirect(target, 301);
+  }
+
   // "/" → "/en" or "/ar" from Accept-Language, keeping the query string (?l= etc.).
   if (url.pathname === "/") {
     const target = url.clone();
@@ -56,5 +63,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/L/:path*", "/en", "/en/:path*", "/ar", "/ar/:path*", "/admin", "/admin/:path*"],
+  matcher: ["/", "/L/:path*", "/l/:path*", "/en", "/en/:path*", "/ar", "/ar/:path*", "/admin", "/admin/:path*", "/contact.vcf"],
 };

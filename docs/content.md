@@ -8,7 +8,7 @@ Anything written as `[TODO: ...]` shows on the site as a visible placeholder unt
 
 ## Contact details — `content/profile.ts`
 
-`email`, `linkedin` (full profile URL) and `github` (full URL). They feed the contact block, the short links in the Home hero, and (Phase 6) the "Save contact" card. There is deliberately no phone or WhatsApp. If a value is set back to `"[TODO: ...]"`, its button shows greyed out.
+`email`, `linkedin` (full profile URL) and `github` (full URL). They feed the contact block, the short links in the Home hero, and the "Save contact" card (`/contact.vcf`). There is deliberately no phone or WhatsApp. If a value is set back to `"[TODO: ...]"`, its button shows greyed out.
 
 ## The journey — `content/journey.ts`
 
@@ -46,7 +46,7 @@ Add or edit an entry in the `hackathons` list (newest first):
   country: "JO",                      // two-letter country code
   international: false,               // true shows the "International" tag
   placement: "1st Place",             // "1st Place" | "2nd Place" | "Participated"
-  linkedInUrl: "https://www.linkedin.com/posts/...", // opened by "View post"
+  postUrl: "https://www.linkedin.com/posts/...", // opened by "View post" (LinkedIn or any article)
   // Optional, each shows only when present:
   problem: { en: "...", ar: "..." },
   built: { en: "...", ar: "..." },
@@ -56,7 +56,7 @@ Add or edit an entry in the `hackathons` list (newest first):
 }
 ```
 
-"View post" opens `linkedInUrl` in a new tab: copy the post's link from LinkedIn ("Copy link to post"). The story fields show inside the card, under the title.
+"View post" opens `postUrl` in a new tab: a LinkedIn post ("Copy link to post") or any article about the hackathon. The story fields show inside the card, under the title.
 
 The stats at the top of the page (total, 1st places, countries) are computed from this list.
 
@@ -71,15 +71,28 @@ The portrait is a background-removed cut-out stored in `public/images/`:
 - `portrait.png`: the original (560×560, transparent background)
 - `portrait-192.webp`: mobile hero
 - `portrait-400.webp`: desktop orbit
+- `vcard-photo.jpg`: the contact photo in "Save contact" (on the disc colour; contact apps don't do transparency)
 
-To replace it, export a new square cut-out, then regenerate the two web sizes (requires `cwebp`):
+To replace it, export a new square cut-out as `public/images/portrait.png`, then regenerate everything that's made from it (requires `cwebp` and ImageMagick):
 
 ```sh
 cwebp -q 82 -alpha_q 90 -resize 192 192 public/images/portrait.png -o public/images/portrait-192.webp
 cwebp -q 82 -alpha_q 90 -resize 400 400 public/images/portrait.png -o public/images/portrait-400.webp
+magick public/images/portrait.png -resize 256x256 -background '#2a1466' -flatten -strip -quality 82 public/images/vcard-photo.jpg
+node scripts/render-og.mjs   # the link-preview images, see below
 ```
 
-The link-preview (OG) images are added in Phase 6; this section will cover them then.
+## Link-preview images (WhatsApp, LinkedIn, …)
+
+`public/og/og-en.png` and `public/og/og-ar.png` (1200×630) are what chat apps show when someone shares the site. They're rendered from `scripts/og/og-en.html` and `og-ar.html` (the Claude Design artboards, using `public/images/portrait.png`):
+
+```sh
+node scripts/render-og.mjs
+```
+
+Keep your face inside the centre square: WhatsApp crops previews to a square. Chat apps cache previews for a while, so a new image can take a few days to show up on links that were already shared.
+
+The share title and description come from `meta` in `i18n/en.ts` and `i18n/ar.ts`.
 
 ## Hidden until Phase 7
 

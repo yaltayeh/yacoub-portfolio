@@ -80,7 +80,7 @@ export const ar: Dictionary = {
     placement: { first: "المركز الأول", second: "المركز الثاني", participated: "مشاركة" },
     international: "دولي",
     viewPost: "عرض المنشور",
-    viewPostLabel: "عرض منشور {title} على LinkedIn",
+    viewPostLabel: "عرض منشور {title} (يفتح في نافذة جديدة)",
     details: {
       problem: "المشكلة",
       built: "ما بنيناه",

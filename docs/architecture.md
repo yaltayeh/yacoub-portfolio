@@ -1,6 +1,6 @@
 # Architecture
 
-> Grows phase by phase. Covered so far: routing, i18n, styling, data, link tracking, the admin and printed batches (Phases 1–5).
+> Routing, i18n, styling, data, link tracking, the admin, printed batches, and the finishing layer (metadata, security, performance).
 
 ## Overview
 
@@ -13,7 +13,6 @@ flowchart LR
   Q[QR / tracked link] -->|"/l/CODE or /L/CODE"| LH["app/l/[code]/route.ts"]
   LH -->|"302 /{lang}?l=CODE"| P
   MW -.->|"?l=CODE: log after response"| DB[(D1: DB)]
-  H["/health (temporary)"] --> DB
 ```
 
 The site is a vinext (Next.js App Router API on Vite) app running as one Cloudflare Worker. Public pages are server components rendered from TypeScript content files; the only client JavaScript is the language toggle.
@@ -28,7 +27,8 @@ The site is a vinext (Next.js App Router API on Vite) app running as one Cloudfl
 | `/{lang}/hackathons` | Hackathons |
 | any other `/{lang}` | 404 (`dynamicParams = false`) |
 
-- `app/[lang]/layout.tsx` is a **root layout**: it renders `<html lang dir>` per locale, so the whole page mirrors in Arabic. The temporary dev pages have their own root layout in `app/(dev)/layout.tsx`, and the admin will get its own in Phase 4.
+- `app/[lang]/layout.tsx` is a **root layout**: it renders `<html lang dir>` per locale, so the whole page mirrors in Arabic. The admin has its own root layout (`app/admin/layout.tsx`).
+- `www.altaieh.tech` redirects (301) to `altaieh.tech` in the middleware.
 - Locales, `dir`, `Accept-Language` parsing and path switching live in `lib/i18n.ts`.
 - UI strings are in `i18n/en.ts` and `i18n/ar.ts`; `ar.ts` is typed against `en.ts`, so a missing key fails the type-check.
 - `components/RichText.tsx` renders content text: backticks mark mono code names, and in Arabic every run of Latin text (ft_ssl, ESP32, 42) is wrapped in a left-to-right span so it doesn't reorder. Latin titles inside RTL cards use `<bdi>`.
@@ -36,6 +36,7 @@ The site is a vinext (Next.js App Router API on Vite) app running as one Cloudfl
 
 ## Styling
 
+- `app/styles/fonts.css`: IBM Plex, **self-hosted** from `public/fonts` (Latin + Arabic subsets, woff2, `font-display: swap`, Google's unicode ranges so a page only downloads what it uses). Each layout preloads the files its first screen needs (`lib/fonts.ts`).
 - `app/styles/tokens.css`: the Calm Quantum design tokens as CSS variables (from the Claude Design system and canvas).
 - `app/globals.css`: reset, focus ring, reduced-motion rules.
 - `app/styles/site.css`: the public site. Mobile first (390px design); the desktop layout (1440px design) starts at 900px. Only logical properties (`margin-inline`, `inset-inline-start`, ...), so RTL needs almost no special rules; directional icons carry a `flip` class mirrored under `[dir="rtl"]`.
@@ -83,16 +84,27 @@ Codes (`lib/codes.ts`) are 7 characters from `23456789ABCDEFGHJKMNPQRSTUVWXYZ` (
 
 How to edit these is in `docs/content.md`.
 
-## LinkedIn posts
+## Hackathon posts
 
-Hackathon posts are not embedded. "View post" in `components/HackathonCard.tsx` is a plain link that opens the post on LinkedIn in a new tab, so the page loads nothing from LinkedIn and needs no third-party frames in its CSP.
+Hackathon posts are not embedded. "View post" in `components/HackathonCard.tsx` is a plain link to `postUrl` (a LinkedIn post or a news article) that opens in a new tab, so the page loads nothing from third parties and the CSP allows no frames.
+
+## Metadata, sharing and SEO
+
+- `lib/metadata.ts` builds each page's metadata: title, description, **canonical URL without `?l=`**, hreflang alternates (`en`, `ar`, `x-default`), Open Graph and Twitter tags with the per-locale preview image `public/og/og-{en,ar}.png` (1200×630, rendered from the design by `scripts/render-og.mjs`).
+- `htmlLimitedBots: /.*/` in `next.config.ts` makes metadata render into `<head>` for every request. By default Next.js/vinext stream `generateMetadata` output into `<body>`, which some link-preview scrapers and Lighthouse don't read.
+- `app/robots.ts` keeps `/admin`, `/api/`, `/l/` and `/L/` out of search; `app/sitemap.ts` lists the six public pages with language alternates. Favicons: `public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`.
+- `/contact.vcf` (`app/contact.vcf/route.ts`, `lib/vcard.ts`): vCard 3.0 from `content/profile.ts` with the photo embedded (read from static assets), CRLF line endings and 75-octet folding as the spec requires.
+
+## Security
+
+Headers on every response (`next.config.ts`): a Content Security Policy that allows only this site (`script-src 'self' 'unsafe-inline'` because vinext writes the RSC payload as inline scripts; `frame-src 'none'`, `frame-ancestors 'none'`, `object-src 'none'`), HSTS, `nosniff`, `X-Frame-Options: DENY`, a strict referrer policy, a restrictive Permissions-Policy and COOP. The admin is `noindex` in its HTML and via `X-Robots-Tag`; login is rate limited.
 
 ## Cloudflare bindings
 
 | Binding | Used by |
 |---|---|
-| `DB` (D1) | Link lookups (`/l/`), event logging (middleware), the admin, Better Auth (users, sessions, rate limits), `/health` |
+| `DB` (D1) | Link lookups (`/l/`), event logging (middleware), the admin, Better Auth (users, sessions, rate limits) |
 | `MEDIA` (R2) | Reserved for project images (Phase 7) |
-| `ASSETS` | Static files from `public/` (the portrait) and the build |
+| `ASSETS` | Static files from `public/` and the build; also read by `/contact.vcf` for the photo |
 
 Bindings are read with `import { env } from "cloudflare:workers"`; `db/client.ts` creates the Drizzle client per request.

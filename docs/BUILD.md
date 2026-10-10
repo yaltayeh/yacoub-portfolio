@@ -229,19 +229,19 @@ The last item visually references station 4 (same project evolving).
 - Title: "Where I competed and collaborated." / "حيث نافست وتعاونت."
 - Stats: **computed from the data**, not hard-coded: total hackathons, count of 1st places, distinct countries. (Currently 6 · 4× 1st Place · 3 Countries.)
 - Placement badges: 1st Place (accent glow), 2nd Place (softer accent), Participated (dignified neutral). AR: المركز الأول / المركز الثاني / مشاركة. International tag: International / دولي.
-- **"View post" / "عرض المنشور" opens the LinkedIn post** (`linkedInUrl`) in a new tab. Posts are not embedded on the site.
+- **"View post" / "عرض المنشور" opens the hackathon's post** (`postUrl`, usually LinkedIn, sometimes a news article) in a new tab. Posts are not embedded on the site.
 - Optional fields (problem, what we built, my role, takeaway, tech tags) render only when present.
 
 Data (`/content/hackathons.ts`), extend the owner's existing type with `country` and `international`:
 
 ```ts
 export const hackathons: Hackathon[] = [
-  { slug: "42-asia-hackathon-bangkok", title: "42 Asia Hackathon", year: "2025", location: "Bangkok, Thailand", country: "TH", international: true, placement: "2nd Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_asiahackathon2025-activity-7394622237187842048-zdF0" },
-  { slug: "mena-devs-hackathon", title: "MENA Devs Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2" },
-  { slug: "joddb-hackathon", title: "JODDB Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI" },
-  { slug: "dahab-hackathon", title: "Dahab Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j" },
-  { slug: "42-asia-hackathon-seoul", title: "42 Asia Hackathon", year: "2024", location: "Seoul, Korea", country: "KR", international: true, placement: "Participated", linkedInUrl: "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53" },
-  { slug: "orange-coding-academy-hackathon", title: "Orange Coding Academy's Hackathon", year: "2024", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", linkedInUrl: "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT" },
+  { slug: "42-asia-hackathon-bangkok", title: "42 Asia Hackathon", year: "2025", location: "Bangkok, Thailand", country: "TH", international: true, placement: "2nd Place", postUrl: "https://cpf.jo/media_center/طلاب-42-عمّان-يحققون-المركز-الثاني-في-ها/" },
+  { slug: "mena-devs-hackathon", title: "MENA Devs Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", postUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2" },
+  { slug: "joddb-hackathon", title: "JODDB Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", postUrl: "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI" },
+  { slug: "dahab-hackathon", title: "Dahab Hackathon", year: "2025", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", postUrl: "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j" },
+  { slug: "42-asia-hackathon-seoul", title: "42 Asia Hackathon", year: "2024", location: "Seoul, Korea", country: "KR", international: true, placement: "Participated", postUrl: "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53" },
+  { slug: "orange-coding-academy-hackathon", title: "Orange Coding Academy's Hackathon", year: "2024", location: "Amman, Jordan", country: "JO", international: false, placement: "1st Place", postUrl: "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT" },
 ];
 ```
 

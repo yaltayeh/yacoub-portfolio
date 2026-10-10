@@ -53,7 +53,7 @@ Each link has its own address (`/admin/links?link=X7K2P9Q` or `?link=17`), so yo
 
 To reprint or re-export cards you made earlier, use **Reprint or export a range** at the bottom of the Generate page (e.g. 51 to 100).
 
-QR codes always point to `https://altaieh.tech/l/CODE` (encoded in capitals for a smaller, easier-to-scan code), even when you generate them on a preview site. They start working once the domain is connected (Phase 6).
+QR codes always point to `https://altaieh.tech/l/CODE` (encoded in capitals for a smaller, easier-to-scan code), even when you generate them on a preview site.
 
 ## What gets recorded
 
@@ -81,19 +81,12 @@ Share detection is a list in `lib/bots.ts`. To recognise a new app, add a row wi
 
 and add the name to the `Platform` type at the top of the file. Put more specific patterns first: the first match wins (iMessage's preview bot also mentions Facebook and Twitter, so its rule comes before theirs).
 
-## Test links (temporary, until the admin exists)
+## Looking at the raw data
 
-`scripts/seed-test-links.ts` creates digital links named "TEST link N" and prints their URLs:
-
-```sh
-node scripts/seed-test-links.ts --local            # local database (pnpm dev / pnpm start)
-node scripts/seed-test-links.ts --preview --count 2 # remote preview database
-```
-
-It never writes to production. To see what was recorded:
+The admin shows everything, but you can also query D1 directly:
 
 ```sh
-npx wrangler d1 execute DB --local --command "SELECT l.code, e.type, e.platform, e.device, e.os, e.country, e.path FROM events e JOIN links l ON l.id = e.link_id ORDER BY e.id DESC LIMIT 20"
+npx wrangler d1 execute DB --remote --command "SELECT l.number, l.name, e.type, e.platform, e.device, e.os, e.country, datetime(e.created_at, 'unixepoch') FROM events e JOIN links l ON l.id = e.link_id ORDER BY e.id DESC LIMIT 20"
 ```
 
-Use `--remote --preview` instead of `--local` for the preview database. The script is removed in Phase 6.
+Use `--remote --preview` for the preview database and `--local` for local development.

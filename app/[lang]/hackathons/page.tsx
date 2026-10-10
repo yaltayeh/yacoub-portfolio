@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/i18n";
+import { pageMetadata } from "@/lib/metadata";
 import { hackathons, hackathonStats, type Hackathon, type Placement } from "@/content/hackathons";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -13,7 +14,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return { title: getDictionary(lang).meta.hackathonsTitle };
+  return pageMetadata(lang, "/hackathons", getDictionary(lang).meta.hackathonsTitle);
 }
 
 const placementKey: Record<Placement, HackathonCardData["placement"]> = {
@@ -37,7 +38,7 @@ export default async function HackathonsPage({ params }: Props) {
     countryName: regionNames.of(h.country) ?? h.country,
     international: h.international,
     placement: placementKey[h.placement],
-    postUrl: h.linkedInUrl,
+    postUrl: h.postUrl,
     details: [
       { label: t.hackathons.details.problem, text: h.problem?.[locale] },
       { label: t.hackathons.details.built, text: h.built?.[locale] },

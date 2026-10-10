@@ -78,7 +78,7 @@ export const en = {
     placement: { first: "1st Place", second: "2nd Place", participated: "Participated" },
     international: "International",
     viewPost: "View post",
-    viewPostLabel: "View the {title} post on LinkedIn",
+    viewPostLabel: "View the {title} post (opens in a new tab)",
     details: {
       problem: "The problem",
       built: "What we built",

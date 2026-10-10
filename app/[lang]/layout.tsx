@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import "../styles/site.css";
 import { dirOf, isLocale, locales } from "@/lib/i18n";
-import { fontsHref } from "@/lib/fonts";
-import { getDictionary } from "@/i18n";
+import { fontPreloads } from "@/lib/fonts";
+import { pageMetadata, siteIcons } from "@/lib/metadata";
 
 type Props = Readonly<{ children: React.ReactNode; params: Promise<{ lang: string }> }>;
 
@@ -17,11 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  const t = getDictionary(lang);
-  return {
-    title: t.meta.homeTitle,
-    description: t.meta.description,
-  };
+  return { ...pageMetadata(lang, ""), icons: siteIcons };
 }
 
 export const viewport: Viewport = {
@@ -37,9 +33,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={lang} dir={dirOf(lang)}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href={fontsHref} />
+        {fontPreloads[lang].map((href) => (
+          <link key={href} rel="preload" href={href} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
       </head>
       <body>{children}</body>
     </html>

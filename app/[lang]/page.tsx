@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/i18n";
+import { pageMetadata } from "@/lib/metadata";
 import { journey } from "@/content/journey";
 import { contactLinks, linkedinHandle, profile } from "@/content/profile";
 import { projectsEnabled } from "@/content/site";
@@ -17,7 +18,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return { title: getDictionary(lang).meta.homeTitle };
+  return pageMetadata(lang, "");
 }
 
 export default async function HomePage({ params }: Props) {

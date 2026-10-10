@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary, type Dictionary } from "@/i18n";
+import { pageMetadata } from "@/lib/metadata";
 import { journey, type Station } from "@/content/journey";
 import { currentlyStudying, doneStationIds, lastUpdated, next, nowStationIds, type NextItem } from "@/content/roadmap";
 import { projectsEnabled } from "@/content/site";
@@ -18,7 +19,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return { title: getDictionary(lang).meta.roadmapTitle };
+  return pageMetadata(lang, "/roadmap", getDictionary(lang).meta.roadmapTitle);
 }
 
 const byId = (ids: string[]) =>
