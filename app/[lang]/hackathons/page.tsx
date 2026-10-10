@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/i18n";
 import { pageMetadata } from "@/lib/metadata";
+import { hackathonsJsonLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/JsonLd";
 import { hackathons, hackathonStats, type Hackathon, type Placement } from "@/content/hackathons";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -14,7 +16,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return pageMetadata(lang, "/hackathons", getDictionary(lang).meta.hackathonsTitle);
+  return pageMetadata(lang, "hackathons");
 }
 
 const placementKey: Record<Placement, HackathonCardData["placement"]> = {
@@ -61,6 +63,7 @@ export default async function HackathonsPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={hackathonsJsonLd(locale)} />
       <SiteHeader locale={locale} page="hackathons" t={t} />
       <main>
         <section aria-labelledby="page-title" className="page-hero">

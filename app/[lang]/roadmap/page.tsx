@@ -4,7 +4,7 @@ import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary, type Dictionary } from "@/i18n";
 import { pageMetadata } from "@/lib/metadata";
 import { journey, type Station } from "@/content/journey";
-import { currentlyStudying, doneStationIds, lastUpdated, next, nowStationIds, type NextItem } from "@/content/roadmap";
+import { currentlyStudying, doneStationIds, lastUpdated, lastUpdatedISO, next, nowStationIds, type NextItem } from "@/content/roadmap";
 import { projectsEnabled } from "@/content/site";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -19,7 +19,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return pageMetadata(lang, "/roadmap", getDictionary(lang).meta.roadmapTitle);
+  return pageMetadata(lang, "roadmap");
 }
 
 const byId = (ids: string[]) =>
@@ -49,7 +49,7 @@ export default async function RoadmapPage({ params }: Props) {
             </h1>
             <p className="updated">
               <span aria-hidden="true" className="updated__dot" />
-              {t.roadmap.lastUpdated} {lastUpdated[locale]}
+              {t.roadmap.lastUpdated} <time dateTime={lastUpdatedISO}>{lastUpdated[locale]}</time>
             </p>
             <Legend t={t} counts={counts} className="legend--inline only-mobile" />
           </div>
@@ -152,7 +152,7 @@ function StationRow({
     body = (
       <>
         <StatusChip status="completed" t={t} suffix={station.completedOn?.[locale]} />
-        <h3 className="station__title">
+        <h3 id={`${station.id}-title`} className="station__title">
           <RichText text={station.title[locale]} locale={locale} />
         </h3>
         <p className="station__text">
@@ -165,7 +165,7 @@ function StationRow({
     body = (
       <div className="card card--glow card--lift tl-card">
         <StatusChip status={station.status} t={t} />
-        <h3 className="station__title">
+        <h3 id={`${station.id}-title`} className="station__title">
           <RichText text={station.title[locale]} locale={locale} />
         </h3>
         <p className="station__text">
@@ -206,7 +206,9 @@ function StationRow({
         )}
         <StationNode status={station.status} />
       </div>
-      <div className="tl-body">{body}</div>
+      <article className="tl-body" aria-labelledby={`${station.id}-title`}>
+        {body}
+      </article>
     </li>
   );
 }
@@ -221,9 +223,9 @@ function NextRow({ item, locale, t, last }: { item: NextItem; locale: Locale; t:
           {origin ? <span className="node__ghost" /> : null}
         </span>
       </div>
-      <div className="tl-body tl-next__body">
+      <article className="tl-body tl-next__body" aria-labelledby={`${item.id}-title`}>
         <div className="tl-next__main">
-          <h3 className="station__title">
+          <h3 id={`${item.id}-title`} className="station__title">
             <RichText text={item.title[locale]} locale={locale} />
           </h3>
           <p className="station__text">
@@ -245,7 +247,7 @@ function NextRow({ item, locale, t, last }: { item: NextItem; locale: Locale; t:
           <Calendar size={13} strokeWidth={2} />
           {item.when}
         </span>
-      </div>
+      </article>
     </li>
   );
 }

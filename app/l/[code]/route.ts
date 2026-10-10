@@ -29,6 +29,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ code
       Location: target.toString(),
       "Cache-Control": "private, no-store",
       Vary: "Accept-Language",
+      // A tracked link is a personal redirect, never a search result.
+      "X-Robots-Tag": "noindex, nofollow",
     },
   });
 }

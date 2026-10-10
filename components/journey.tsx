@@ -57,9 +57,9 @@ export function JourneyPath({ stations, locale, t }: { stations: Station[]; loca
               {line ? <span aria-hidden="true" className={`station__line station__line--${line}`} /> : null}
               <StationNode status={station.status} />
             </div>
-            <div className="station__body">
+            <article className="station__body" aria-labelledby={`${station.id}-title`}>
               <StationContent station={station} locale={locale} t={t} />
-            </div>
+            </article>
           </li>
         );
       })}
@@ -69,7 +69,7 @@ export function JourneyPath({ stations, locale, t }: { stations: Station[]; loca
 
 function StationContent({ station, locale, t }: { station: Station; locale: Locale; t: Dictionary }) {
   const heading = (
-    <h3 className="station__title">
+    <h3 id={`${station.id}-title`} className="station__title">
       <RichText text={station.title[locale]} locale={locale} />
     </h3>
   );

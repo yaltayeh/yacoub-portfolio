@@ -1,16 +1,24 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
-import { SITE_URL } from "@/lib/metadata";
+import { pageUrl, publicPages } from "@/lib/metadata";
+import { lastUpdatedISO } from "@/content/roadmap";
+import { contentUpdated } from "@/content/site";
 
-const paths = ["", "/roadmap", "/hackathons"];
-
+// Every public page in both locales, with hreflang alternates and lastmod
+// taken from the content files (the Roadmap has its own "last updated").
 export default function sitemap(): MetadataRoute.Sitemap {
-  return paths.flatMap((path) =>
+  return publicPages.flatMap(({ key }) =>
     locales.map((locale) => ({
-      url: `${SITE_URL}/${locale}${path}`,
+      url: pageUrl(locale, key),
+      lastModified: key === "roadmap" ? `${lastUpdatedISO}-01` : contentUpdated,
       changeFrequency: "monthly" as const,
-      priority: path === "" ? 1 : 0.7,
-      alternates: { languages: Object.fromEntries(locales.map((l) => [l, `${SITE_URL}/${l}${path}`])) },
+      priority: key === "home" ? 1 : 0.7,
+      alternates: {
+        languages: {
+          ...Object.fromEntries(locales.map((l) => [l, pageUrl(l, key)])),
+          "x-default": pageUrl("en", key),
+        },
+      },
     })),
   );
 }

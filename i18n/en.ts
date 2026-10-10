@@ -1,10 +1,27 @@
 // English UI strings. Every key here must also exist in ar.ts (enforced by the Dictionary type).
 export const en = {
   meta: {
-    homeTitle: "Hi, I'm Yacoub Altaieh",
-    description: "I study post-quantum cryptography and build a hardware password manager.",
-    roadmapTitle: "Roadmap · Yacoub Altaieh",
-    hackathonsTitle: "Hackathons · Yacoub Altaieh",
+    // The share card (Open Graph / Twitter): the same personal greeting on every page.
+    ogTitle: "Hi, I'm Yacoub Altaieh",
+    ogDescription: "I study post-quantum cryptography and build a hardware password manager.",
+    // Search results: a unique <title> and description per page (descriptions 150–160 characters).
+    pages: {
+      home: {
+        title: "Yacoub Altaieh — Cryptography & Post-Quantum | 42 Amman",
+        description:
+          "Yacoub Altaieh is a 42 Amman student building cryptography from scratch in C, including MD5, SHA-256 and RSA, on his way to post-quantum ML-KEM and ML-DSA.",
+      },
+      roadmap: {
+        title: "Roadmap — Yacoub Altaieh",
+        description:
+          "Yacoub Altaieh's roadmap, step by step: done, in progress (ft_ssl, networking, a hardware password manager on ESP32) and next, post-quantum ML-KEM and ML-DSA.",
+      },
+      hackathons: {
+        title: "Hackathons — Yacoub Altaieh",
+        description:
+          "Hackathons Yacoub Altaieh competed in from 2024 to 2025: four 1st places in Amman and a 2nd place at the 42 Asia Hackathon in Bangkok, plus Seoul in 2024.",
+      },
+    },
   },
   nav: {
     label: "Main",
@@ -78,7 +95,7 @@ export const en = {
     placement: { first: "1st Place", second: "2nd Place", participated: "Participated" },
     international: "International",
     viewPost: "View post",
-    viewPostLabel: "View the {title} post (opens in a new tab)",
+    viewPostLabel: "View post: {title} (opens in a new tab)",
     details: {
       problem: "The problem",
       built: "What we built",

@@ -7,7 +7,7 @@ This file is the single source of truth for building **altaieh.tech**, the perso
 ## 0. Before you start
 
 1. **Read the designs.** All visual design was done in Claude Design. Open the design handoff the owner provides and treat it as the visual source of truth: colors, spacing, type scale, components, states, mobile and desktop layouts, English and Arabic. If this file and the design disagree on *visuals*, the design wins. If they disagree on *behavior or data*, this file wins. If something is missing from both, ask.
-2. **The project already exists.** The owner has already created an empty vinext project, deployed it to Cloudflare, and connected the GitHub repository: **every push is built and deployed automatically**. Do not re-scaffold or create a new Cloudflare project; work inside the existing codebase and its existing Wrangler config. See section 13.0 for the deployment workflow.
+2. **The project already exists.** The owner has already created an empty vinext project, deployed it to Cloudflare, and connected the GitHub repository: **every push is built and deployed automatically**. Do not re-scaffold or create a new Cloudflare project; work inside the existing codebase and its existing Wrangler config. See section 14.0 for the deployment workflow.
 3. **Verify vinext.** vinext is new. Before writing code, inspect the existing project and read vinext's current docs/README, then confirm, in a short note to the owner:
    - How the existing build/deploy is configured (build command, Wrangler config, Worker name).
    - How to access Cloudflare bindings (D1, R2, env vars) from route handlers, server components and middleware.
@@ -281,7 +281,7 @@ Match the Claude Design admin screens. Calm, dense, fast; mobile matters most (u
 ## 10. vCard, metadata, link previews
 
 - **`/contact.vcf`**: vCard 3.0 built from `/content/profile.ts` (name, email, phone, URL `https://altaieh.tech`, LinkedIn, GitHub, title "Cryptography · 42 Amman", photo optional). `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: attachment; filename="yacoub-altaieh.vcf"`.
-- **Open Graph / Twitter meta on every public page**, per locale:
+- **Open Graph / Twitter meta on every public page**, per locale (the share card; each page's `<title>` and meta description for search are in section 11):
 
 | | EN | AR |
 |---|---|---|
@@ -294,7 +294,44 @@ Match the Claude Design admin screens. Calm, dense, fast; mobile matters most (u
 
 ---
 
-## 11. Quality bar
+## 11. SEO & GEO
+
+Public page content must be **server-rendered**, so it's readable without JavaScript (by search engines, AI crawlers and link previews).
+
+### Per-page metadata
+- Unique `<title>` and meta description per page and locale:
+  - Home: "Yacoub Altaieh — Cryptography & Post-Quantum | 42 Amman" / "يعقوب التايه — التشفير وما بعد الكمّي | 42 عمّان"
+  - Roadmap: "Roadmap — Yacoub Altaieh" / "خارطة الطريق — يعقوب التايه"
+  - Hackathons: "Hackathons — Yacoub Altaieh" / "الهاكاثونات — يعقوب التايه"
+
+  Write descriptions (150–160 characters) from each page's content.
+- Keep `og:title` / `og:description` as the personal greeting on every page ("Hi, I'm Yacoub Altaieh" / "مرحباً، أنا يعقوب التايه" + the study/build line). `<title>` is for search; OG is for shares.
+
+### Indexing
+- `/sitemap.xml` generated from routes and content, both locales, with hreflang alternates and `lastmod`.
+- `/robots.txt`: allow public pages; disallow `/admin`, `/api`, `/l/`; reference the sitemap.
+- Canonical URLs never include `?l=`. hreflang `en`, `ar` and `x-default` (→ `/en`).
+- `/admin` and `/l/` also send `X-Robots-Tag: noindex`.
+
+### Structured data (JSON-LD)
+- On Home: a `Person` schema: name "Yacoub Altaieh", `alternateName` ["Yacoub Altayeh", "يعقوب التايه"], `url` https://altaieh.tech, `image` (the photo), `jobTitle`, `description`, `affiliation` 42 Amman, `knowsAbout` (Cryptography, Post-Quantum Cryptography, ML-KEM, ML-DSA, Embedded Systems, ESP32, Networking, Web Development), `sameAs` (LinkedIn, GitHub), and `award` from the hackathon data (computed, not hard-coded).
+- Plus `WebSite` and `ProfilePage` schemas linking to the `Person`.
+- On Hackathons: an `ItemList` of the events.
+- Validate with Google's Rich Results Test.
+
+### GEO (generative engine optimization)
+- `/llms.txt`: a concise Markdown summary of who Yacoub is, what he works on, his journey, hackathon results, and links to every page, generated from the content files so it never goes stale. Also `/llms-full.txt` with the full text of all public pages in both languages.
+- Allow AI crawlers in `robots.txt` (GPTBot, ClaudeBot, PerplexityBot, Google-Extended).
+- Write content as clear, factual, self-contained statements (who, what, where, when) that make sense when quoted alone.
+- Use semantic HTML: one `h1` per page, logical heading order, `<time>` for dates, `<article>` for stations and hackathons.
+- Keep the name spelling consistent: "Yacoub Altaieh" everywhere on the site, with "Yacoub Altayeh" only as `alternateName`.
+
+### Done when
+Sitemap, `robots.txt`, `llms.txt` and JSON-LD validate; every page has a unique title and description in both languages; Lighthouse SEO = 100 on mobile.
+
+---
+
+## 12. Quality bar
 
 - **Mobile-first.** Test at 390px first. The home page must be usable and fast immediately after a QR scan on a mid-range phone over mobile data.
 - **Performance:** public pages cached at the edge where possible; fonts subset and preloaded (`font-display: swap`); no client JS on public pages except the hero animation, scroll reveal of the journey path, and language toggle. Target Lighthouse ≥ 95 on mobile.
@@ -317,7 +354,7 @@ Write the docs for the owner: clear, concise, step-by-step where it's a procedur
 
 ---
 
-## 12. Suggested structure (adapt to vinext conventions)
+## 13. Suggested structure (adapt to vinext conventions)
 
 ```
 app/
@@ -345,11 +382,11 @@ scripts/create-admin.ts
 
 ---
 
-## 13. Phases
+## 14. Phases
 
 Stop at the end of each phase, summarize what was done and anything that deviated from this file, and wait for the owner.
 
-### 13.0 Deployment workflow (already set up)
+### 14.0 Deployment workflow (already set up)
 - The repo is connected to Cloudflare: **a push to the production branch deploys to the live site automatically.** Treat every push to that branch as a release.
 - Work on a feature branch per phase (e.g. `phase-2-public-site`). Check whether Cloudflare's GitHub integration is producing preview deployments for non-production branches; if it is, use the preview URL for review. If not, tell the owner and propose enabling it.
 - Merge into the production branch only after the owner approves the phase.
@@ -388,8 +425,9 @@ Stop at the end of each phase, summarize what was done and anything that deviate
 ### Phase 6 — Finishing
 - vCard, OG/meta/canonical/hreflang, OG images, favicon, CSP and headers, reduced motion, performance pass, accessibility pass.
 - Connect the custom domain **altaieh.tech**.
-- Final documentation pass (section 11, Documentation): make sure every doc is complete and matches the final code.
-**Done when:** sharing `https://altaieh.tech/en` on WhatsApp shows the photo preview with the correct title and description; "Save contact" adds the contact on iOS and Android; Lighthouse mobile ≥ 95; and the owner can follow `docs/content.md` and `docs/admin.md` alone to update a hackathon and generate a batch.
+- SEO & GEO (section 11): per-page titles and descriptions, sitemap, robots.txt (AI crawlers allowed), JSON-LD (Person, WebSite, ProfilePage, hackathon ItemList), `/llms.txt` and `/llms-full.txt`, `X-Robots-Tag` on `/admin` and `/l/`, semantic HTML.
+- Final documentation pass (section 12, Documentation): make sure every doc is complete and matches the final code.
+**Done when:** sharing `https://altaieh.tech/en` on WhatsApp shows the photo preview with the correct title and description; "Save contact" adds the contact on iOS and Android; Lighthouse mobile ≥ 95; the owner can follow `docs/content.md` and `docs/admin.md` alone to update a hackathon and generate a batch; and section 11's "Done when" holds (sitemap, robots.txt, llms.txt and JSON-LD validate, unique titles and descriptions in both languages, Lighthouse SEO = 100 on mobile).
 
 ### Phase 7 — Projects (later, when the owner has content)
 - Markdown content in `/content/projects/{slug}/en.md` and `ar.md` with frontmatter (title, summary, category: crypto / hardware / networking / web, status, tags, cover image, GitHub URL, order).
@@ -400,7 +438,7 @@ Stop at the end of each phase, summarize what was done and anything that deviate
 
 ---
 
-## 14. Open items for the owner
+## 15. Open items for the owner
 
 - [ ] Final photo (homepage orbit + OG image)
 - [x] Email, phone, LinkedIn URL, GitHub URL (no WhatsApp)

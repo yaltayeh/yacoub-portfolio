@@ -41,6 +41,9 @@ const nextConfig: NextConfig = {
       // Belt and braces: the admin is also noindex in its HTML.
       { source: "/admin/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/admin", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      // Tracked links are personal redirects, never search results.
+      { source: "/l/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/L/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
 };

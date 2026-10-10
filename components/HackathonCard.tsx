@@ -42,7 +42,9 @@ export function HackathonCard({ item, labels }: { item: HackathonCardData; label
       <div className="hk-card__head">
         <div className="hk-card__info">
           <div className="hk-card__meta">
-            <span className="hk-card__year">{item.year}</span>
+            <time className="hk-card__year" dateTime={item.year}>
+              {item.year}
+            </time>
             <span aria-hidden="true" className="hk-card__sep" />
             <abbr title={item.countryName} className="hk-card__cc">
               {item.country}

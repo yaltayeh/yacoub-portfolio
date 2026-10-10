@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return { ...pageMetadata(lang, ""), icons: siteIcons };
+  return { ...pageMetadata(lang, "home"), icons: siteIcons };
 }
 
 export const viewport: Viewport = {

@@ -10,7 +10,7 @@ export function SiteFooter({ locale, t }: { locale: Locale; t: Dictionary }) {
         <span>
           {profile.name[locale]} · <RichText text={t.footer.location} locale={locale} />
         </span>
-        <span>{new Date().getFullYear()}</span>
+        <time dateTime={String(new Date().getFullYear())}>{new Date().getFullYear()}</time>
       </div>
     </footer>
   );

@@ -92,7 +92,11 @@ node scripts/render-og.mjs
 
 Keep your face inside the centre square: WhatsApp crops previews to a square. Chat apps cache previews for a while, so a new image can take a few days to show up on links that were already shared.
 
-The share title and description come from `meta` in `i18n/en.ts` and `i18n/ar.ts`.
+The share title and description come from `meta.ogTitle` / `meta.ogDescription` in `i18n/en.ts` and `i18n/ar.ts`. Each page's search title and description are in `meta.pages` (keep descriptions around 150–160 characters).
+
+## Dates for search engines
+
+When you change content, bump `contentUpdated` in `content/site.ts` (Home, Hackathons) or `lastUpdatedISO` in `content/roadmap.ts` (Roadmap). They feed the sitemap's `lastmod`. `/llms.txt`, `/llms-full.txt` and the structured data update themselves from the content files.
 
 ## Hidden until Phase 7
 
