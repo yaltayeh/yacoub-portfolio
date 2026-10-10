@@ -60,3 +60,17 @@ A short log of notable decisions and every deviation from `BUILD.md`, with the r
 - **The preview grid shows the first 23 cards** plus a "+N more in the export" tile, as in the design; the print view and the ZIP always contain every card in the range.
 - **Reprinting** is a small "from / to" form on the Generate page, so any earlier range can be printed or exported again.
 - **Print QR codes are pure black on white with no extra margin** (each card cell is white space already); the ZIP's standalone SVGs keep the standard 4-module quiet zone.
+
+## 2026-10-10 — Phase 6
+
+- **The domain was already connected** (Custom Domains for `altaieh.tech` and `www`); added a `www` → apex 301 so there's one canonical host.
+- **Metadata always in `<head>`** (`htmlLimitedBots: /.*/`): vinext, like Next.js 15, streams `generateMetadata` into `<body>` by default, even for WhatsApp and LinkedIn's bots in our tests. The pages are small, so blocking on metadata costs nothing visible.
+- **Fonts are self-hosted** (IBM Plex, OFL) instead of loaded from Google Fonts: removes two render-blocking cross-origin round trips, lets the CSP allow only `'self'`, and gives preloads per locale. Only Latin and Arabic subsets are kept.
+- **CSP allows `'unsafe-inline'` scripts**: vinext writes the React Server Components payload as inline scripts and doesn't support nonces yet. Everything else is locked to `'self'`.
+- **HSTS without `includeSubDomains`**, because other projects live on subdomains of the same zone.
+- **OG images are rendered from the design artboards with Playwright** (`scripts/render-og.mjs`), so changing the photo means one command.
+- **Favicon:** the two-circle logo mark on a dark rounded square (it disappears on light browser tabs otherwise).
+- **vCard:** phone number included (`TEL;TYPE=CELL`) but not shown anywhere on the site, no WhatsApp (by request), LinkedIn and GitHub as labelled URLs plus `X-SOCIALPROFILE`, photo on the disc colour.
+- **Hackathon `linkedInUrl` renamed `postUrl`**, because the Bangkok entry now links to the CPF news article (owner's request). BUILD.md updated.
+- **Removed:** the temporary `/health` and `/design-tokens` pages and `scripts/seed-test-links.ts`.
+- **SEO & GEO (BUILD.md section 11, added by the owner):** separate search titles/descriptions per page with the OG greeting kept for shares; JSON-LD built from content (awards computed); `llms.txt`/`llms-full.txt` generated from content; AI crawlers allowed explicitly; `Event` start dates are years only, since that's all the data has. JSON-LD was checked against the schema.org vocabulary; Google's Rich Results Test should be run once on production.

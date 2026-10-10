@@ -3,10 +3,25 @@ import type { Dictionary } from "./en";
 // Arabic UI strings. Technical terms (ft_ssl, ESP32, 42, ...) stay in Latin script.
 export const ar: Dictionary = {
   meta: {
-    homeTitle: "مرحباً، أنا يعقوب التايه",
-    description: "أدرس التشفير ما بعد الكمّي، وأصنع Hardware Password Manager.",
-    roadmapTitle: "خارطة الطريق · يعقوب التايه",
-    hackathonsTitle: "الهاكاثونات · يعقوب التايه",
+    ogTitle: "مرحباً، أنا يعقوب التايه",
+    ogDescription: "أدرس التشفير ما بعد الكمّي، وأصنع Hardware Password Manager.",
+    pages: {
+      home: {
+        title: "يعقوب التايه — التشفير وما بعد الكمّي | 42 عمّان",
+        description:
+          "يعقوب التايه طالب في 42 عمّان يبني خوارزميات التشفير من الصفر بلغة C، مثل MD5 وSHA-256 وRSA، ويتّجه الآن نحو التشفير ما بعد الكمّي بمعياري ML-KEM وML-DSA.",
+      },
+      roadmap: {
+        title: "خارطة الطريق — يعقوب التايه",
+        description:
+          "خارطة طريق يعقوب التايه خطوة بخطوة: ما أنجزه، وما يعمل عليه الآن (ft_ssl والشبكات ومدير كلمات مرور على ESP32)، وما هو قادم: ML-KEM وML-DSA المقاومان للكم.",
+      },
+      hackathons: {
+        title: "الهاكاثونات — يعقوب التايه",
+        description:
+          "الهاكاثونات التي شارك فيها يعقوب التايه بين 2024 و2025: أربعة مراكز أولى في عمّان، والمركز الثاني في 42 Asia Hackathon في بانكوك، ومشاركة دولية في سيول بكوريا.",
+      },
+    },
   },
   nav: {
     label: "القائمة الرئيسية",
@@ -80,7 +95,7 @@ export const ar: Dictionary = {
     placement: { first: "المركز الأول", second: "المركز الثاني", participated: "مشاركة" },
     international: "دولي",
     viewPost: "عرض المنشور",
-    viewPostLabel: "عرض منشور {title} على LinkedIn",
+    viewPostLabel: "عرض المنشور: {title} (يفتح في نافذة جديدة)",
     details: {
       problem: "المشكلة",
       built: "ما بنيناه",

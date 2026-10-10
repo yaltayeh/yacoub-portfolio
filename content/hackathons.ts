@@ -11,8 +11,8 @@ export type Hackathon = {
   country: string;
   international: boolean;
   placement: Placement;
-  /** The LinkedIn post that "View post" opens. */
-  linkedInUrl: string;
+  /** The post or article that "View post" opens (LinkedIn, a news page, …). */
+  postUrl: string;
   /** Optional story. Each part renders only when present. */
   problem?: Localized;
   built?: Localized;
@@ -32,8 +32,7 @@ export const hackathons: Hackathon[] = [
     country: "TH",
     international: true,
     placement: "2nd Place",
-    linkedInUrl:
-      "https://www.linkedin.com/posts/42amman_asiahackathon2025-activity-7394622237187842048-zdF0",
+    postUrl: "https://cpf.jo/media_center/طلاب-42-عمّان-يحققون-المركز-الثاني-في-ها/",
   },
   {
     slug: "mena-devs-hackathon",
@@ -43,7 +42,7 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    linkedInUrl:
+    postUrl:
       "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7384198569077055488-1My2",
   },
   {
@@ -54,7 +53,7 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    linkedInUrl:
+    postUrl:
       "https://www.linkedin.com/posts/42amman_42aehaetaepaeu-42aenaezaeqaex-aetaemaebaebaerabraewaesaeyabraepaesaehaevaex-activity-7371465399256772608-NyuI",
   },
   {
@@ -65,7 +64,7 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    linkedInUrl:
+    postUrl:
       "https://www.linkedin.com/posts/albattikhi_اختتمنا-بالأمس-فعالية-dahab-jo-hackathon-share-7335669999644176386-QI7j",
   },
   {
@@ -76,7 +75,7 @@ export const hackathons: Hackathon[] = [
     country: "KR",
     international: true,
     placement: "Participated",
-    linkedInUrl:
+    postUrl:
       "https://www.linkedin.com/posts/42amman_42-asia-hackathon-activity-7245402011624423428-WH53",
   },
   {
@@ -87,7 +86,7 @@ export const hackathons: Hackathon[] = [
     country: "JO",
     international: false,
     placement: "1st Place",
-    linkedInUrl:
+    postUrl:
       "https://www.linkedin.com/posts/yacoub-altayeh_i-am-excited-to-share-that-i-had-the-privilege-activity-7217499033664155648-UecT",
   },
 ];

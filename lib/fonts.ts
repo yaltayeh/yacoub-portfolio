@@ -1,3 +1,9 @@
-// IBM Plex Sans, Sans Arabic and Mono at the weights the design uses.
-export const fontsHref =
-  "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap";
+import type { Locale } from "./i18n";
+
+// Self-hosted IBM Plex (see app/styles/fonts.css). Preload only what the first
+// screen of each locale needs, so text renders in the right font without a swap.
+export const fontPreloads: Record<Locale | "admin", string[]> = {
+  en: ["/fonts/plex-sans-latin.woff2", "/fonts/plex-mono-400-latin.woff2"],
+  ar: ["/fonts/plex-arabic-600.woff2", "/fonts/plex-arabic-400.woff2", "/fonts/plex-sans-latin.woff2"],
+  admin: ["/fonts/plex-sans-latin.woff2"],
+};

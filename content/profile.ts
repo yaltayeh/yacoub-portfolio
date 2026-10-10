@@ -5,6 +5,8 @@ import type { Localized } from "@/lib/i18n";
 export const profile = {
   name: { en: "Yacoub Altaieh", ar: "يعقوب التايه" } satisfies Localized,
   email: "yacoubaltaieh@gmail.com",
+  /** International format. Only used in the "Save contact" card, never shown on the site. */
+  phone: "+962 78 115 7799",
   linkedin: "https://www.linkedin.com/in/yacoub-altaieh",
   github: "https://github.com/yaltayeh",
   photo: {

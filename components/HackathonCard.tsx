@@ -42,7 +42,9 @@ export function HackathonCard({ item, labels }: { item: HackathonCardData; label
       <div className="hk-card__head">
         <div className="hk-card__info">
           <div className="hk-card__meta">
-            <span className="hk-card__year">{item.year}</span>
+            <time className="hk-card__year" dateTime={item.year}>
+              {item.year}
+            </time>
             <span aria-hidden="true" className="hk-card__sep" />
             <abbr title={item.countryName} className="hk-card__cc">
               {item.country}
@@ -55,9 +57,9 @@ export function HackathonCard({ item, labels }: { item: HackathonCardData; label
               </span>
             ) : null}
           </div>
-          <h3 className="hk-card__title">
+          <h2 className="hk-card__title">
             <bdi>{item.title}</bdi>
-          </h3>
+          </h2>
           <p className="only-mobile">{meta}</p>
         </div>
         <div className="hk-card__actions">
@@ -82,7 +84,7 @@ export function HackathonCard({ item, labels }: { item: HackathonCardData; label
         <div className="hk-card__details">
           {item.details.map((d) => (
             <div key={d.label} className={d.highlight ? "hk-detail hk-detail--role" : "hk-detail"}>
-              <h4 className="hk-detail__label">{d.label}</h4>
+              <h3 className="hk-detail__label">{d.label}</h3>
               <p className="hk-detail__text">{d.text}</p>
             </div>
           ))}

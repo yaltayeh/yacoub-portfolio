@@ -1,6 +1,6 @@
 # altaieh.tech
 
-The personal site of Yacoub Altaieh: a bilingual (English/Arabic) digital business card with a private admin for tracked links. [`docs/BUILD.md`](docs/BUILD.md) is the source of truth for what is being built.
+The personal site of Yacoub Altaieh, live at **https://altaieh.tech**: a bilingual (English/Arabic) digital business card with a private admin for tracked links. [`docs/BUILD.md`](docs/BUILD.md) is the source of truth for what is being built.
 
 ## Stack
 
@@ -39,7 +39,7 @@ Both commands share the same local database in `.wrangler/state`.
 | `pnpm start` | Serve the built Worker locally |
 | `pnpm typecheck` | Run the TypeScript type-check |
 | `ADMIN_EMAIL=… ADMIN_PASSWORD=… node scripts/create-admin.ts --local\|--preview\|--production` | Create or reset the admin account |
-| `node scripts/seed-test-links.ts --local\|--preview` | Create test tracked links (temporary, Phase 3) |
+| `node scripts/render-og.mjs` | Re-render the link-preview images after changing the photo |
 | `pnpm screenshot <url> <dir> <paths…>` | Full-page screenshots at 390px and 1440px (uses your installed Chrome) |
 | `pnpm cf-typegen` | Regenerate binding types after editing `wrangler.jsonc` |
 | `pnpm db:generate --name <name>` | Generate a migration from `db/schema.ts` |
@@ -55,20 +55,22 @@ app/
   l/[code]/          tracked-link entry point (302 to /{lang}?l=CODE)
   admin/             private admin (own root layout): overview, links (+ new), generate (+ print, zip), login
   api/auth/          Better Auth handler
-  (dev)/             temporary checks: /health and /design-tokens (removed in Phase 6)
-  styles/            tokens.css (design tokens), site.css (public site)
+  contact.vcf/       "Save contact" vCard
+  robots.ts, sitemap.ts
+  styles/            fonts.css (self-hosted IBM Plex), tokens.css (design tokens), site.css (public site)
   globals.css        base styles
 components/          header, footer, contact block, journey, hackathon card, icons
 content/             profile, journey, roadmap, hackathons (edit these to change the site)
 i18n/                en.ts and ar.ts UI strings
-lib/                 i18n, link codes, User-Agent and bot rules, tracking, auth, admin data, QR
+lib/                 i18n, link codes, User-Agent and bot rules, tracking, auth, admin data, QR, vCard, metadata
 db/
   schema.ts          Drizzle schema
   client.ts          per-request Drizzle client
   migrations/        SQL migrations (generated, applied with Wrangler)
-middleware.ts        "/" → /en or /ar, /L/ → /l/, logging of ?l= visits and shares
-public/images/       portrait
-scripts/             screenshot helper, temporary test-link seeder
+middleware.ts        www → apex, "/" → /en or /ar, /L/ → /l/, admin guard, logging of ?l= visits and shares
+next.config.ts       security headers (CSP, HSTS, …)
+public/              fonts/, images/ (portrait, vCard photo), og/ (link previews), favicons, _headers (cache rules)
+scripts/             create-admin, render-og (+ og/ templates), screenshot helper
 docs/                project documentation
 wrangler.jsonc       Worker config: production at the top level, `previews` for branch previews
 ```
@@ -80,5 +82,4 @@ wrangler.jsonc       Worker config: production at the top level, `previews` for 
 - [`docs/content.md`](docs/content.md): how to update text, the journey, roadmap, hackathons and photo
 - [`docs/deployment.md`](docs/deployment.md): deploys, previews, databases and migrations
 - [`docs/decisions.md`](docs/decisions.md): notable decisions and deviations from BUILD.md
-
 - [`docs/admin.md`](docs/admin.md): signing in, the admin account, naming cards, links, digital links, what visits and shares are

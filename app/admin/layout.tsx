@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import "./admin.css";
+import { siteIcons } from "@/lib/metadata";
+import { fontPreloads } from "@/lib/fonts";
 
-const fontsHref =
-  "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap";
 
 // Root layout of the private admin: English only, never indexed.
 export const metadata: Metadata = {
   title: { default: "Admin", template: "%s · Admin" },
   robots: { index: false, follow: false },
+  icons: siteIcons,
 };
 
 export const viewport: Viewport = {
@@ -22,9 +23,9 @@ export default function AdminRootLayout({ children }: Readonly<{ children: React
   return (
     <html lang="en" dir="ltr">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href={fontsHref} />
+        {fontPreloads.admin.map((href) => (
+          <link key={href} rel="preload" href={href} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
       </head>
       <body className="admin">{children}</body>
     </html>

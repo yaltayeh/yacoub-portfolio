@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/i18n";
+import { pageMetadata } from "@/lib/metadata";
+import { homeJsonLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/JsonLd";
 import { journey } from "@/content/journey";
 import { contactLinks, linkedinHandle, profile } from "@/content/profile";
 import { projectsEnabled } from "@/content/site";
@@ -17,7 +20,7 @@ type Props = { params: Promise<{ lang: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return { title: getDictionary(lang).meta.homeTitle };
+  return pageMetadata(lang, "home");
 }
 
 export default async function HomePage({ params }: Props) {
@@ -35,6 +38,7 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={homeJsonLd(locale)} />
       <SiteHeader locale={locale} page="home" t={t} />
       <main>
         <section aria-labelledby="hero-name" className="hero">

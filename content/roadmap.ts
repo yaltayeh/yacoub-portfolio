@@ -1,7 +1,9 @@
 import type { Localized } from "@/lib/i18n";
 
-// Update this whenever the roadmap changes.
+// Update both whenever the roadmap changes: the words shown on the page, and the
+// same month as YYYY-MM (for <time> and the sitemap's lastmod).
 export const lastUpdated: Localized = { en: "October 2026", ar: "أكتوبر 2026" };
+export const lastUpdatedISO = "2026-10";
 
 // Which journey stations (content/journey.ts) appear in each zone.
 export const doneStationIds = ["common-core"];

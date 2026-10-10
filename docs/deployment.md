@@ -91,6 +91,14 @@ Their IDs are in `wrangler.jsonc`.
 
 Sign-up is disabled. Create (or later reset) the one admin account with `scripts/create-admin.ts`; see `docs/admin.md`. Each database (local, preview, production) has its own account.
 
-## Not yet covered
+## The domain
 
-- Connecting the `altaieh.tech` domain: Phase 6
+`altaieh.tech` is a zone on the same Cloudflare account. `altaieh.tech` and `www.altaieh.tech` are **Custom Domains** of the `yacoub-portfolio` Worker (Workers & Pages → yacoub-portfolio → Settings → Domains & Routes); Cloudflare manages their DNS records and certificates. The middleware redirects `www` to `altaieh.tech` (301), so there's one canonical host.
+
+The zone also holds other things (email routing, `yc`, `pablo`, `mc2026`, `ayc` subdomains); leave those records alone. HSTS is sent without `includeSubDomains` for the same reason.
+
+## Caching
+
+- Static files get cache headers from `public/_headers`: fonts for a year (`immutable`), images, OG images and icons for a day.
+- `/contact.vcf` is cacheable for an hour.
+- Pages, `/` and `/l/` are rendered per request (they're fast, and tracking needs every request to reach the Worker).
