@@ -24,9 +24,32 @@ Find a branch's preview URL on the GitHub commit (the "Workers Builds" check) or
 | R2 | `yacoub-portfolio-media` | `yacoub-portfolio-media` (shared) |
 | `APP_ENV` | `production` | `preview` |
 
-Previews have their own secrets. When secrets are added in Phase 4, set them for production with `wrangler secret put` and for previews with the Previews secret commands (documented then).
+Previews have their own secrets (see "Secrets" below).
 
 Preview URLs are public by default. They don't hold real data, but they can be protected with Cloudflare Access if needed.
+
+## Secrets
+
+Secrets never go in the repo. There is one so far:
+
+| Secret | What | Generate |
+|---|---|---|
+| `BETTER_AUTH_SECRET` | Signs admin session cookies. Changing it signs everyone out. | `openssl rand -base64 32` |
+
+Set it in three places:
+
+```sh
+# Production (do this before merging the Phase 4 PR; the admin needs it)
+openssl rand -base64 32 | npx wrangler secret put BETTER_AUTH_SECRET
+
+# Every future branch Preview (applies to Previews created after this)
+openssl rand -base64 32 | npx wrangler preview base-config secret put BETTER_AUTH_SECRET
+
+# One Preview that already exists, e.g. the current branch
+openssl rand -base64 32 | npx wrangler preview secret put BETTER_AUTH_SECRET --name <branch-name>
+```
+
+Locally, put it in `.dev.vars` (gitignored; copy `.dev.vars.example`).
 
 ## Bindings
 
@@ -64,7 +87,10 @@ npx wrangler r2 bucket create yacoub-portfolio-media
 
 Their IDs are in `wrangler.jsonc`.
 
+## The admin account
+
+Sign-up is disabled. Create (or later reset) the one admin account with `scripts/create-admin.ts`; see `docs/admin.md`. Each database (local, preview, production) has its own account.
+
 ## Not yet covered
 
-- Secrets (`BETTER_AUTH_SECRET`, admin seed): Phase 4
 - Connecting the `altaieh.tech` domain: Phase 6
