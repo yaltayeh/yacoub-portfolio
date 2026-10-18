@@ -1321,6 +1321,10 @@ a[aria-disabled="true"] {
   font-family: var(--font-arabic);
   font-size: 13px;
 }
+/* The company name wraps as a whole, never mid-name. */
+.site-footer__company {
+  display: inline-block;
+}
 @media (min-width: 900px) {
   .site-footer {
     background: none;

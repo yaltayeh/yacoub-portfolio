@@ -112,6 +112,6 @@ export const ar: Dictionary = {
     github: "GitHub",
   },
   footer: {
-    location: "42 عمّان",
+    company: "Al-Kumaat for Computer Programming LLC",
   },
 };

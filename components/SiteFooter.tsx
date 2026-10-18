@@ -8,7 +8,10 @@ export function SiteFooter({ locale, t }: { locale: Locale; t: Dictionary }) {
     <footer className="site-footer">
       <div className="site-footer__inner">
         <span>
-          {profile.name[locale]} · <RichText text={t.footer.location} locale={locale} />
+          {profile.name[locale]} ·{" "}
+          <span className="site-footer__company">
+            <RichText text={t.footer.company} locale={locale} />
+          </span>
         </span>
         <time dateTime={String(new Date().getFullYear())}>{new Date().getFullYear()}</time>
       </div>

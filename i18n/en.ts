@@ -112,7 +112,7 @@ export const en = {
     github: "GitHub",
   },
   footer: {
-    location: "42 Amman",
+    company: "Al-Kumaat for Computer Programming LLC",
   },
 };
 
