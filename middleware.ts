@@ -2,7 +2,7 @@ import { waitUntil } from "cloudflare:workers";
 import { NextResponse, type NextRequest } from "next/server";
 import { localeFromAcceptLanguage } from "@/lib/i18n";
 import { normalizeCode } from "@/lib/codes";
-import { isAdminRequest, recordEvent } from "@/lib/tracking";
+import { isAdminRequest, recordEvent, recordSiteVisit } from "@/lib/tracking";
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
@@ -46,17 +46,26 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Every public page opened with ?l=CODE is logged here, whether it came from a
+  // Every public page opened with ?l=CODE is logged here as a link event; pages opened without it are logged as site visits, whether it came from a
   // QR scan (via /l/) or from a link someone copied and shared. Logging runs after
   // the response is sent, so it never slows the page down.
   if (request.method === "GET") {
     const code = normalizeCode(url.searchParams.get("l"));
-    if (code && !isAdminRequest(request)) {
-      waitUntil(
-        recordEvent(request, code).catch((error: unknown) => {
-          console.error("[tracking] failed to record event", error);
-        }),
-      );
+    if (!isAdminRequest(request)) {
+      if (code) {
+        waitUntil(
+          recordEvent(request, code).catch((error: unknown) => {
+            console.error("[tracking] failed to record event", error);
+          }),
+        );
+      } else {
+        // No tracked link: Google, a pasted URL, an app, a typed address. Logged as a site visit.
+        waitUntil(
+          recordSiteVisit(request).catch((error: unknown) => {
+            console.error("[tracking] failed to record site visit", error);
+          }),
+        );
+      }
     }
   }
   return NextResponse.next();

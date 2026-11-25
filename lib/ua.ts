@@ -36,3 +36,12 @@ function osOf(ua: string): string | null {
   if (/linux|x11/i.test(ua)) return "Linux";
   return null;
 }
+
+/**
+ * Crawlers, uptime monitors and scripts. Anonymous visits from these are not
+ * people, so they're not logged. Link-preview bots (previewBots) are checked first.
+ */
+export function isAutomated(ua: string | null): boolean {
+  if (!ua) return true;
+  return /bot\b|bot[\/;)]|crawl|spider|slurp|headless|lighthouse|pingdom|uptime|monitor|curl\/|wget|python|go-http|axios|node-fetch|java\/|okhttp\/|scrapy|preview|facebookexternalhit|embedly/i.test(ua);
+}

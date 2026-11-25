@@ -71,6 +71,20 @@ Notes:
 - Your own visits are not recorded while you're signed in to the admin.
 - No IP addresses or raw browser strings are stored, only the derived fields above.
 
+## Visitors (opens without a tracked link)
+
+**Visitors** (`/admin/visitors`) logs every open of the public site that did *not* come through one of your links: from Google, a pasted URL, an app, or a typed address. It shows:
+
+- Totals, a "where they came from" breakdown (Google, LinkedIn, GitHub, Direct / unknown, …) and the top countries.
+- A log with the source, device, country and city, newest first. "Link previews" are chat apps fetching the plain URL (e.g. WhatsApp), logged like shares.
+
+Notes:
+
+- Only the referring **host** is stored, never the full URL. Apps that hide the referrer (WhatsApp, Telegram, most email apps) and typed addresses show as **Direct / unknown**.
+- Not logged: crawlers and scripts, prefetches, navigation inside the site, and your own visits while signed in.
+- Add `?utm_source=name` to a link you post yourself to label it when there's no referrer.
+- Recognised sites live in `lib/referrer.ts`.
+
 ## Adding a sharing app
 
 Share detection is a list in `lib/bots.ts`. To recognise a new app, add a row with the platform name and a pattern that matches its preview bot's User-Agent, e.g.:

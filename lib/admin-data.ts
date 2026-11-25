@@ -1,7 +1,7 @@
 // All admin reads and writes. Server-only: callers must have checked requireAdmin().
 import { and, asc, desc, eq, sql, type SQL } from "drizzle-orm";
 import { getDb } from "@/db/client";
-import { events, links, type Link, type LinkEvent } from "@/db/schema";
+import { events, links, siteVisits, type Link, type LinkEvent, type SiteVisit } from "@/db/schema";
 import { generateCode, normalizeCode } from "./codes";
 
 export type LinkKindFilter = "all" | "card" | "digital";
@@ -241,4 +241,55 @@ export function parseRange(fromRaw: string | undefined, toRaw: string | undefine
   const to = Number(toRaw);
   if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to < from || to - from >= MAX_BATCH) return null;
   return { from, to };
+}
+
+export type VisitorFilter = "all" | "visit" | "share";
+export const VISITOR_PAGE_SIZE = 50;
+
+/** Anonymous opens (no tracked link): totals, top sources and countries, and a page of the log. */
+export async function getSiteVisits({ type, page }: { type: VisitorFilter; page: number }) {
+  const db = getDb();
+  const where = type === "all" ? undefined : eq(siteVisits.type, type);
+  const since = new Date(Date.now() - 7 * 86400_000);
+  const week = sql`${siteVisits.createdAt} >= ${Math.floor(since.getTime() / 1000)}`;
+
+  const [totals] = await db
+    .select({
+      visits: sql<number>`coalesce(sum(case when ${siteVisits.type} = 'visit' then 1 else 0 end), 0)`,
+      shares: sql<number>`coalesce(sum(case when ${siteVisits.type} = 'share' then 1 else 0 end), 0)`,
+      week: sql<number>`coalesce(sum(case when ${siteVisits.type} = 'visit' and ${week} then 1 else 0 end), 0)`,
+    })
+    .from(siteVisits);
+
+  const sources = await db
+    .select({ source: siteVisits.source, host: sql<string | null>`max(${siteVisits.referrerHost})`, count: sql<number>`count(*)` })
+    .from(siteVisits)
+    .where(eq(siteVisits.type, "visit"))
+    .groupBy(siteVisits.source, sql`case when ${siteVisits.source} = 'other' then ${siteVisits.referrerHost} end`)
+    .orderBy(sql`count(*) desc`)
+    .limit(8);
+
+  const countries = await db
+    .select({ country: siteVisits.country, count: sql<number>`count(*)` })
+    .from(siteVisits)
+    .where(eq(siteVisits.type, "visit"))
+    .groupBy(siteVisits.country)
+    .orderBy(sql`count(*) desc`)
+    .limit(6);
+
+  const rows = await db
+    .select()
+    .from(siteVisits)
+    .where(where)
+    .orderBy(desc(siteVisits.createdAt), desc(siteVisits.id))
+    .limit(VISITOR_PAGE_SIZE + 1)
+    .offset((Math.max(1, page) - 1) * VISITOR_PAGE_SIZE);
+
+  return {
+    totals: totals ?? { visits: 0, shares: 0, week: 0 },
+    sources,
+    countries,
+    rows: rows.slice(0, VISITOR_PAGE_SIZE) as SiteVisit[],
+    hasMore: rows.length > VISITOR_PAGE_SIZE,
+  };
 }

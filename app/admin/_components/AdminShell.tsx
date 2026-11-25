@@ -2,14 +2,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { LogoMark } from "@/components/icons";
 import { SITE_HOST } from "@/lib/site";
-import { Grid, LinkIcon, PlusSquare } from "./admin-icons";
+import { Globe, Grid, LinkIcon, PlusSquare } from "./admin-icons";
 import { SignOutButton } from "./SignOutButton";
 
-export type AdminSection = "overview" | "links" | "create";
+export type AdminSection = "overview" | "links" | "visitors" | "create";
 
 const items: { key: AdminSection; href: string; label: string; icon: ReactNode }[] = [
   { key: "overview", href: "/admin", label: "Overview", icon: <Grid size={22} /> },
   { key: "links", href: "/admin/links", label: "Links", icon: <LinkIcon size={22} /> },
+  { key: "visitors", href: "/admin/visitors", label: "Visitors", icon: <Globe size={22} /> },
   { key: "create", href: "/admin/links/new", label: "Create", icon: <PlusSquare size={22} /> },
 ];
 
