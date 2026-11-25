@@ -36,5 +36,26 @@ export const events = sqliteTable(
   ],
 );
 
+// Opens of the public site that did NOT come through a tracked link (Google, a pasted
+// URL, an app, a typed address). Same privacy rules: derived fields only, no IPs or raw User-Agents.
+export const siteVisits = sqliteTable(
+  "site_visits",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    type: text("type", { enum: eventTypes }).notNull(),
+    platform: text("platform"), // shares only: whatsapp, telegram, linkedin, ...
+    source: text("source"), // visits only: "google", "linkedin", "direct", "other", ...
+    referrerHost: text("referrer_host"), // host of the referring site or app, never a full URL
+    device: text("device"),
+    os: text("os"),
+    country: text("country"),
+    city: text("city"),
+    path: text("path"),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  },
+  (t) => [index("site_visits_created_at_idx").on(t.createdAt)],
+);
+
+export type SiteVisit = typeof siteVisits.$inferSelect;
 export type Link = typeof links.$inferSelect;
 export type LinkEvent = typeof events.$inferSelect;

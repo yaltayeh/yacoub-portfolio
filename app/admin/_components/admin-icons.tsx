@@ -120,3 +120,10 @@ export const QrIcon = ({ size = 16 }: { size?: number }) => (
     <path d="M14 14h3v3M21 14v.01M14 21h7v-4" />
   </I>
 );
+export const Globe = ({ size }: { size?: number }) => (
+  <I size={size}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18" />
+    <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z" />
+  </I>
+);

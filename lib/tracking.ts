@@ -1,5 +1,6 @@
 import { env } from "cloudflare:workers";
-import { classifyUserAgent } from "./ua";
+import { classifyUserAgent, isAutomated } from "./ua";
+import { classifyReferrer } from "./referrer";
 
 // Better Auth's session cookie (the __Secure- prefix is used over HTTPS).
 // Shared with the admin in Phase 4.
@@ -43,5 +44,53 @@ export async function recordEvent(request: RequestLike, code: string): Promise<v
       Math.floor(Date.now() / 1000), // Drizzle "timestamp" mode stores seconds
       code,
     )
+    .run();
+}
+
+/** A public page (not a file or API route): /en, /ar/roadmap, … */
+const PAGE_PATH = /^\/(en|ar)(\/|$)/;
+
+/**
+ * Records an open of a public page that did not come through a tracked link: from
+ * Google, a pasted URL, an app, a typed address. Skips everything that isn't a person
+ * opening a page: crawlers and scripts, prefetches and client-side fetches, and
+ * navigation inside the site itself (the referrer is our own host).
+ * A link-preview bot fetching the plain URL is kept, as a "share".
+ */
+export async function recordSiteVisit(request: RequestLike & { nextUrl: { pathname: string; searchParams: URLSearchParams } }): Promise<void> {
+  const path = request.nextUrl.pathname;
+  if (!PAGE_PATH.test(path)) return;
+
+  // Browsers mark page loads "document"; prefetches and RSC fetches are "empty".
+  const dest = request.headers.get("sec-fetch-dest");
+  if (dest && dest !== "document") return;
+  if (request.headers.has("rsc") || request.headers.has("next-router-prefetch")) return;
+  if (/prefetch/i.test(`${request.headers.get("purpose") ?? ""} ${request.headers.get("sec-purpose") ?? ""}`)) return;
+
+  const ua = request.headers.get("user-agent");
+  const c = classifyUserAgent(ua);
+  const now = Math.floor(Date.now() / 1000);
+  const cf = (request as { cf?: { city?: unknown } }).cf;
+  const city = typeof cf?.city === "string" ? cf.city.slice(0, 80) : null;
+
+  if (c.type === "share") {
+    await env.DB.prepare(
+      `INSERT INTO site_visits (type, platform, country, city, path, created_at) VALUES ('share', ?1, ?2, ?3, ?4, ?5)`,
+    )
+      .bind(c.platform, countryOf(request), city, path, now)
+      .run();
+    return;
+  }
+
+  if (isAutomated(ua)) return;
+  const host = request.headers.get("host") ?? "";
+  const ref = classifyReferrer(request.headers.get("referer"), host, request.nextUrl.searchParams.get("utm_source"));
+  if (ref.internal) return;
+
+  await env.DB.prepare(
+    `INSERT INTO site_visits (type, source, referrer_host, device, os, country, city, path, created_at)
+     VALUES ('visit', ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+  )
+    .bind(ref.source, ref.host, c.device, c.os, countryOf(request), city, path, now)
     .run();
 }
